@@ -4,9 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by ahmad on 5/16/16.
+ * @author ahmad
+ * @version 1.0.0
  */
-public class Frame extends JFrame {
+public abstract class Frame extends JFrame {
     private Dimension screenDimension;
     private Dimension mousePointerDimension;
 
@@ -34,12 +35,13 @@ public class Frame extends JFrame {
          * ***********IMPORTANT***********
          * Change the (20,0) point if the mouse cursor change. This is the anchor point.
          */
-        Cursor c = toolkit.createCustomCursor(image , new Point(20,
-                0), "img");
+        Cursor c = toolkit.createCustomCursor(image , new Point(20, 0), "img");
         this.setCursor (c);
     }
 
     public void showFrame(){
         setVisible(true);
     }
+
+    public abstract void putElements();
 }
