@@ -2,6 +2,8 @@ package com.poorgroupproject.thrumaniamapeditor.form;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * @author ahmad
@@ -17,6 +19,7 @@ public abstract class Frame extends JFrame {
         setLayout(null);
         setTitle("Thrumania Map Editor");
         setMouseCursor();
+        keyListener();
     }
 
     private void setUpGraphicFullscreen(){
@@ -35,8 +38,30 @@ public abstract class Frame extends JFrame {
          * ***********IMPORTANT***********
          * Change the (20,0) point if the mouse cursor change. This is the anchor point.
          */
-        Cursor c = toolkit.createCustomCursor(image , new Point(20, 0), "img");
+        Cursor c = toolkit.createCustomCursor(image , new Point(14, 0), "img");
         this.setCursor (c);
+    }
+
+    private void keyListener(){
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+                if (keyEvent.getKeyCode() == keyEvent.VK_ESCAPE) {
+                    System.exit(0);
+                    System.out.println("some text");
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+
+            }
+        });
     }
 
     public void showFrame(){
