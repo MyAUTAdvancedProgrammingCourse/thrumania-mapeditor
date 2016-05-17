@@ -5,10 +5,7 @@ import com.poorgroupproject.thrumaniamapeditor.form.element.MapPanel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +43,51 @@ public class Main extends Frame {
         initMap();
         loadImages();
         putElements();
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                switch (keyEvent.getKeyCode()){
+                    case KeyEvent.VK_LEFT:
+                        moveViewportLeft();
+                        break;
+                    case KeyEvent.VK_UP:
+                        moveViewportUp();
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        moveViewportRight();
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        moveViewportDown();
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        System.exit(0);
+                        break;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+
+            }
+        });
+        addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+                switch (mouseWheelEvent.getWheelRotation()){
+                    case 1:
+                        System.out.println("zoom1");
+                        break;
+                    case -1:
+                        System.out.println("zoom2");
+                        break;
+                }
+            }
+        });
     }
 
     private void zoomIn(){
@@ -57,19 +99,23 @@ public class Main extends Frame {
     }
 
     private void moveViewportLeft(){
-        mapViewportX -= 10;
+        mapViewportX += 10;
+        repaint();
     }
 
     private void moveViewportRight(){
-        mapViewportX += 10;
+        mapViewportX -= 10;
+        repaint();
     }
 
     private void moveViewportUp(){
         mapViewportY -= 10;
+        repaint();
     }
 
     private void moveViewportDown(){
         mapViewportY += 10;
+        repaint();
     }
 
     private void loadImages(){
@@ -134,10 +180,11 @@ public class Main extends Frame {
 
     @Override
     public void paint(Graphics graphics) {
-        System.out.println("this is run");
-        if (map == null)
-            System.out.println("some probliem");
-        graphics.drawImage(map,20,20,null);
+        int width = ((int) (cols * CELL_WIDTH * zoomScale));
+        int height = ((int) (rows * CELL_HEIGHT * zoomScale));
+        int x = -1 * mapViewportX;
+        int y = -1 * mapViewportY;
+        graphics.drawImage(map,x,y,null);
     }
 
 
