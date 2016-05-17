@@ -62,7 +62,6 @@ public class Main extends Frame {
                 System.out.println(col + ":" + row);
                 System.out.println();
                 changeItem(col,row,Cell.WATER);
-                changeItem(3,5,Cell.WATER);
             }
 
             @Override
@@ -121,16 +120,18 @@ public class Main extends Frame {
             @Override
             public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
                 switch (mouseWheelEvent.getWheelRotation()){
-                    case 1:
+                    case -1:
                         zoomIn();
                         break;
-                    case -1:
+                    case 1:
                         zoomOut();
                         break;
                 }
             }
         });
     }
+
+
 
     private void zoomIn(){
         if (zoomScale < 3) {
@@ -197,10 +198,8 @@ public class Main extends Frame {
             }
         }
 
-        mapMatrix[3][2] = Cell.LAND;
-
     }
-
+    
     private void changeItem(int col, int row, Cell content){
         Graphics graphics = map.createGraphics();
         Image image = itemImages[0];
@@ -208,10 +207,11 @@ public class Main extends Frame {
         repaint();
     }
     private void makeMap(){
-        map = new BufferedImage(rows * CELL_DEFAULT_WIDTH, cols * CELL_DEFAULT_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
+
+        map = new BufferedImage(cols * CELL_DEFAULT_HEIGHT ,rows * CELL_DEFAULT_WIDTH,BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = map.createGraphics();
-        for (int i = 0; i < mapMatrix.length; i++) {
-            for (int j = 0; j < mapMatrix[0].length; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 Image image = null;
                 switch (mapMatrix[i][j]){
                     case LAND:
@@ -222,7 +222,7 @@ public class Main extends Frame {
                         break;
                 }
 
-                graphics.drawImage(image, i * CELL_DEFAULT_WIDTH, j * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                graphics.drawImage(image, j * CELL_DEFAULT_HEIGHT, i * CELL_DEFAULT_WIDTH,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
             }
         }
         repaint();
@@ -238,7 +238,7 @@ public class Main extends Frame {
         int height = ((int) (rows * CELL_DEFAULT_HEIGHT * zoomScale));
         int x = -1 * mapViewportX;
         int y = -1 * mapViewportY;
-        graphics.drawImage(map,x,y,null);
+        graphics.drawImage(map,x,y,width,height,null);
     }
 
 
