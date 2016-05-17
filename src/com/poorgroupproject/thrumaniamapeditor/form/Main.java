@@ -4,6 +4,7 @@ import com.poorgroupproject.thrumaniamapeditor.form.element.MapPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -22,10 +23,10 @@ public class Main extends Frame {
     private int cols;
     private int mapViewportX;
     private int mapViewportY;
-    private final int CELL_WIDTH = 50;
-    private final int CELL_HEIGHT = 50;
-    private final int MAP_DEFAULT_ROW = 500;
-    private final int MAP_DEFAULT_COL = 400;
+    private final int CELL_DEFAULT_WIDTH = 75;
+    private final int CELL_DEFAULT_HEIGHT = 75;
+    private final int MAP_DEFAULT_ROW = 50;
+    private final int MAP_DEFAULT_COL = 40;
     private double zoomScale;
 
 
@@ -43,6 +44,47 @@ public class Main extends Frame {
         initMap();
         loadImages();
         putElements();
+
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                int x = ((int) mouseEvent.getPoint().getLocation().getX());
+                int y = ((int) mouseEvent.getPoint().getLocation().getY());
+                System.out.println(x + ":" + y);
+                x += mapViewportX;
+                y += mapViewportY;
+                System.out.println(x + ":" + y);
+                x /= zoomScale;
+                y /= zoomScale;
+                System.out.println(x + ":" + y);
+                int row = y / CELL_DEFAULT_HEIGHT;
+                int col = x / CELL_DEFAULT_WIDTH;
+                System.out.println(col + ":" + row);
+                System.out.println();
+                changeItem(col,row,Cell.WATER);
+                changeItem(3,5,Cell.WATER);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
@@ -80,10 +122,10 @@ public class Main extends Frame {
             public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
                 switch (mouseWheelEvent.getWheelRotation()){
                     case 1:
-                        System.out.println("zoom1");
+                        zoomIn();
                         break;
                     case -1:
-                        System.out.println("zoom2");
+                        zoomOut();
                         break;
                 }
             }
@@ -91,20 +133,26 @@ public class Main extends Frame {
     }
 
     private void zoomIn(){
-        zoomScale += 0.25;
+        if (zoomScale < 3) {
+            zoomScale += 0.25;
+            repaint();
+        }
     }
 
     private void zoomOut(){
-        zoomScale -= 0.25;
+        if (zoomScale > 0.1) {
+            zoomScale -= 0.25;
+            repaint();
+        }
     }
 
     private void moveViewportLeft(){
-        mapViewportX += 10;
+        mapViewportX -= 10;
         repaint();
     }
 
     private void moveViewportRight(){
-        mapViewportX -= 10;
+        mapViewportX += 10;
         repaint();
     }
 
@@ -127,7 +175,7 @@ public class Main extends Frame {
             itemImages[3] = ImageIO.read(new File("resource/image/simerion/characters/0012.gif"));
             itemImages[4] = ImageIO.read(new File("resource/image/simerion/characters/0013.gif"));
             for (int i = 0; i < itemImages.length; i++) {
-                itemImages[i] = itemImages[i].getScaledInstance(CELL_WIDTH,CELL_HEIGHT,Image.SCALE_DEFAULT);
+                itemImages[i] = itemImages[i].getScaledInstance(CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,Image.SCALE_DEFAULT);
             }
 
         } catch (IOException e) {
@@ -153,8 +201,14 @@ public class Main extends Frame {
 
     }
 
+    private void changeItem(int col, int row, Cell content){
+        Graphics graphics = map.createGraphics();
+        Image image = itemImages[0];
+        graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+        repaint();
+    }
     private void makeMap(){
-        map = new BufferedImage(rows * CELL_WIDTH, cols * CELL_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
+        map = new BufferedImage(rows * CELL_DEFAULT_WIDTH, cols * CELL_DEFAULT_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = map.createGraphics();
         for (int i = 0; i < mapMatrix.length; i++) {
             for (int j = 0; j < mapMatrix[0].length; j++) {
@@ -168,7 +222,7 @@ public class Main extends Frame {
                         break;
                 }
 
-                graphics.drawImage(image, i * CELL_WIDTH, j * CELL_HEIGHT,null);
+                graphics.drawImage(image, i * CELL_DEFAULT_WIDTH, j * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
             }
         }
         repaint();
@@ -180,8 +234,8 @@ public class Main extends Frame {
 
     @Override
     public void paint(Graphics graphics) {
-        int width = ((int) (cols * CELL_WIDTH * zoomScale));
-        int height = ((int) (rows * CELL_HEIGHT * zoomScale));
+        int width = ((int) (cols * CELL_DEFAULT_WIDTH * zoomScale));
+        int height = ((int) (rows * CELL_DEFAULT_HEIGHT * zoomScale));
         int x = -1 * mapViewportX;
         int y = -1 * mapViewportY;
         graphics.drawImage(map,x,y,null);
