@@ -23,12 +23,13 @@ public class Main extends Frame {
 
     private int rows;
     private int cols;
-    private int mapX;
-    private int mapY;
+    private int mapViewportX;
+    private int mapViewportY;
     private final int CELL_WIDTH = 50;
     private final int CELL_HEIGHT = 50;
     private final int MAP_DEFAULT_ROW = 500;
     private final int MAP_DEFAULT_COL = 400;
+    private double zoomScale;
 
 
     private enum Cell{
@@ -38,14 +39,59 @@ public class Main extends Frame {
     private Cell [][] mapMatrix;
     private BufferedImage map;
 
-    private BufferedImage []images;
+    private Image []itemImages;
 
     public Main(){
         super();
+        initMap();
+        loadImages();
         putElements();
     }
 
+    private void zoomIn(){
+        zoomScale += 0.25;
+    }
+
+    private void zoomOut(){
+        zoomScale -= 0.25;
+    }
+
+    private void moveViewportLeft(){
+        mapViewportX -= 10;
+    }
+
+    private void moveViewportRight(){
+        mapViewportX += 10;
+    }
+
+    private void moveViewportUp(){
+        mapViewportY -= 10;
+    }
+
+    private void moveViewportDown(){
+        mapViewportY += 10;
+    }
+
+    private void loadImages(){
+        itemImages = new Image[5];
+        try {
+            itemImages[0] = ImageIO.read(new File("resource/image/simerion/characters/0009.gif"));
+            itemImages[1] = ImageIO.read(new File("resource/image/simerion/characters/0010.gif"));
+            itemImages[2] = ImageIO.read(new File("resource/image/simerion/characters/0011.gif"));
+            itemImages[3] = ImageIO.read(new File("resource/image/simerion/characters/0012.gif"));
+            itemImages[4] = ImageIO.read(new File("resource/image/simerion/characters/0013.gif"));
+            for (int i = 0; i < itemImages.length; i++) {
+                itemImages[i] = itemImages[i].getScaledInstance(CELL_WIDTH,CELL_HEIGHT,Image.SCALE_DEFAULT);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void initMap(){
+        zoomScale = 1;
+        mapViewportX = 0;
+        mapViewportY = 0;
         rows = MAP_DEFAULT_ROW;
         cols = MAP_DEFAULT_COL;
 
@@ -56,37 +102,42 @@ public class Main extends Frame {
                 mapMatrix[i][j] = Cell.WATER;
             }
         }
-        map = new BufferedImage(rows * CELL_WIDTH, cols * CELL_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
 
+        mapMatrix[3][2] = Cell.LAND;
+
+    }
+
+    private void makeMap(){
+        map = new BufferedImage(rows * CELL_WIDTH, cols * CELL_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = map.createGraphics();
+        for (int i = 0; i < mapMatrix.length; i++) {
+            for (int j = 0; j < mapMatrix[0].length; j++) {
+                Image image = null;
+                switch (mapMatrix[i][j]){
+                    case LAND:
+                        image = itemImages[0];
+                        break;
+                    case WATER:
+                        image = itemImages[1];
+                        break;
+                }
+
+                graphics.drawImage(image, i * CELL_WIDTH, j * CELL_HEIGHT,null);
+            }
+        }
+        repaint();
     }
     @Override
     public void putElements() {
-
-        Graphics graphics = bufferedImage.createGraphics();
-        images = new BufferedImage[40];
-        try {
-            for (int i = 0; i < images.length; i++) {
-                images[i] = ImageIO.read(new File("resource/image/simerion/tiles/world/ground/000" + 1 + ".gif"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (int j = 0; j < images.length / 10; j++) {
-            for (int i = 1; i <= 10; i++) {
-                graphics.drawImage(images[i-1], i * (images[i-1].getWidth()/2), j * i * (images[i-1].getHeight()/2 - 20),null);
-            }
-        }
-        System.out.println("this is in");
-        repaint();
-
+        makeMap();
     }
 
     @Override
     public void paint(Graphics graphics) {
         System.out.println("this is run");
-        if (bufferedImage == null)
+        if (map == null)
             System.out.println("some probliem");
-        graphics.drawImage(bufferedImage,20,20,null);
+        graphics.drawImage(map,20,20,null);
     }
 
 
