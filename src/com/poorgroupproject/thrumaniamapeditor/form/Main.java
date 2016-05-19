@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PipedReader;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * @author ahmad
@@ -28,39 +29,38 @@ public class Main extends Frame {
     private final int MAP_DEFAULT_ROW = 50;
     private final int MAP_DEFAULT_COL = 40;
     private double zoomScale;
-
-
-    private enum Cell{
-       WATER, LAND
-    } ;
-
+    private int selectedItem;
+    private BufferedImage miniMap;
+    private final int MINI_MAP_WIDTH = 320;
+    private final int MINI_MAP_HEIGHT = 180;
     private Cell [][] mapMatrix;
     private BufferedImage map;
-
     private Image []itemImages;
+
+    private Image []landImage;
+
+    private enum Cell{
+       WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE
+    } ;
 
     public Main(){
         super();
         initMap();
         loadImages();
         putElements();
+        drawMiniMap();
 
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 int x = ((int) mouseEvent.getPoint().getLocation().getX());
                 int y = ((int) mouseEvent.getPoint().getLocation().getY());
-                System.out.println(x + ":" + y);
                 x += mapViewportX;
                 y += mapViewportY;
-                System.out.println(x + ":" + y);
                 x /= zoomScale;
                 y /= zoomScale;
-                System.out.println(x + ":" + y);
                 int row = y / CELL_DEFAULT_HEIGHT;
                 int col = x / CELL_DEFAULT_WIDTH;
-                System.out.println(col + ":" + row);
-                System.out.println();
                 changeItem(col,row,Cell.WATER);
             }
 
@@ -81,6 +81,25 @@ public class Main extends Frame {
 
             @Override
             public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
+        addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent mouseEvent) {
+                int x = ((int) mouseEvent.getPoint().getLocation().getX());
+                int y = ((int) mouseEvent.getPoint().getLocation().getY());
+                x += mapViewportX;
+                y += mapViewportY;
+                x /= zoomScale;
+                y /= zoomScale;
+                int row = y / CELL_DEFAULT_HEIGHT;
+                int col = x / CELL_DEFAULT_WIDTH;
+                changeItem(col,row,Cell.WATER);
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent mouseEvent) {
 
             }
         });
@@ -138,6 +157,7 @@ public class Main extends Frame {
             zoomScale += 0.25;
             repaint();
         }
+        drawMiniMap();
     }
 
     private void zoomOut(){
@@ -145,36 +165,55 @@ public class Main extends Frame {
             zoomScale -= 0.25;
             repaint();
         }
+        drawMiniMap();
     }
 
     private void moveViewportLeft(){
         mapViewportX -= 10;
+        drawMiniMap();
         repaint();
     }
 
     private void moveViewportRight(){
         mapViewportX += 10;
+        drawMiniMap();
         repaint();
     }
 
     private void moveViewportUp(){
         mapViewportY -= 10;
+        drawMiniMap();
         repaint();
     }
 
     private void moveViewportDown(){
         mapViewportY += 10;
+        drawMiniMap();
         repaint();
     }
 
     private void loadImages(){
-        itemImages = new Image[5];
+        /**
+         * itemImages[0] -> water
+         */
+        itemImages = new Image[13];
         try {
-            itemImages[0] = ImageIO.read(new File("resource/image/simerion/characters/0009.gif"));
-            itemImages[1] = ImageIO.read(new File("resource/image/simerion/characters/0010.gif"));
-            itemImages[2] = ImageIO.read(new File("resource/image/simerion/characters/0011.gif"));
-            itemImages[3] = ImageIO.read(new File("resource/image/simerion/characters/0012.gif"));
-            itemImages[4] = ImageIO.read(new File("resource/image/simerion/characters/0013.gif"));
+
+            itemImages[0] = ImageIO.read(new File("resource/image/tile/emp.png"));
+            itemImages[1] = ImageIO.read(new File("resource/image/tile/cntr.png"));
+            itemImages[2] = ImageIO.read(new File("resource/image/tile/ocntr.png"));
+            itemImages[3] = ImageIO.read(new File("resource/image/tile/od.png"));
+            itemImages[4] = ImageIO.read(new File("resource/image/tile/ou.png"));
+            itemImages[5] = ImageIO.read(new File("resource/image/tile/sd.png"));
+            itemImages[6] = ImageIO.read(new File("resource/image/tile/sl.png"));
+            itemImages[7] = ImageIO.read(new File("resource/image/tile/sld.png"));
+            itemImages[8] = ImageIO.read(new File("resource/image/tile/slu.png"));
+            itemImages[9] = ImageIO.read(new File("resource/image/tile/sr.png"));
+            itemImages[10] = ImageIO.read(new File("resource/image/tile/srd.png"));
+            itemImages[11] = ImageIO.read(new File("resource/image/tile/sru.png"));
+            itemImages[12] = ImageIO.read(new File("resource/image/tile/su.png"));
+
+            //Scaling the image
             for (int i = 0; i < itemImages.length; i++) {
                 itemImages[i] = itemImages[i].getScaledInstance(CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,Image.SCALE_DEFAULT);
             }
@@ -199,25 +238,38 @@ public class Main extends Frame {
         }
 
     }
-    
+
+    private void drawMiniMap(){
+        miniMap = new BufferedImage(cols * CELL_DEFAULT_WIDTH ,rows * CELL_DEFAULT_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = miniMap.getGraphics();
+        graphics.drawImage(map,0,0,null);
+        int viewPortRectWidth = ((int) (getWidth() / zoomScale));
+        int viewPortRectHeight = ((int) (getHeight() / zoomScale));
+        graphics.setColor(new Color((float) 0.9,(float) 0.2,(float)0.2, (float) 0.1));
+        graphics.fillRect(mapViewportX,mapViewportY,viewPortRectWidth,viewPortRectHeight);
+        graphics.dispose();
+    }
+
     private void changeItem(int col, int row, Cell content){
         Graphics graphics = map.createGraphics();
-        Image image = itemImages[0];
+        Image image = itemImages[1];
+
         graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
         repaint();
     }
+
     private void makeMap(){
 
-        map = new BufferedImage(cols * CELL_DEFAULT_HEIGHT ,rows * CELL_DEFAULT_WIDTH,BufferedImage.TYPE_INT_ARGB);
+        map = new BufferedImage(cols * CELL_DEFAULT_WIDTH ,rows * CELL_DEFAULT_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = map.createGraphics();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Image image = null;
                 switch (mapMatrix[i][j]){
-                    case LAND:
+                    case WATER:
                         image = itemImages[0];
                         break;
-                    case WATER:
+                    case LAND:
                         image = itemImages[1];
                         break;
                 }
@@ -239,7 +291,18 @@ public class Main extends Frame {
         int x = -1 * mapViewportX;
         int y = -1 * mapViewportY;
         graphics.drawImage(map,x,y,width,height,null);
+        graphics.drawImage(miniMap,
+                (int)getScreenDimension().getWidth() - MINI_MAP_WIDTH,
+                (int)getScreenDimension().getHeight() - MINI_MAP_HEIGHT,
+                MINI_MAP_WIDTH
+                , MINI_MAP_HEIGHT
+                , null);
     }
 
+
+}
+
+class Action{
+    private int actionType;
 
 }

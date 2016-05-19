@@ -69,4 +69,8 @@ public abstract class Frame extends JFrame {
     }
 
     public abstract void putElements();
+
+    public Dimension getScreenDimension(){
+        return screenDimension;
+    }
 }
