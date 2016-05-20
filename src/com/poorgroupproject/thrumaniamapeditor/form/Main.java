@@ -1,18 +1,12 @@
 package com.poorgroupproject.thrumaniamapeditor.form;
 
-import com.poorgroupproject.thrumaniamapeditor.form.element.MapPanel;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.PipedReader;
-import java.util.Map;
-import java.util.Stack;
 
 /**
  * @author ahmad
@@ -22,14 +16,21 @@ public class Main extends Frame {
 
     private int rows;
     private int cols;
+    private int mapWidth;
+    private int mapHeight;
+
     private int mapViewportX;
     private int mapViewportY;
+    private int mapViewPortWidth;
+    private int mapViewPortHeight;
+
+
     private final int CELL_DEFAULT_WIDTH = 75;
     private final int CELL_DEFAULT_HEIGHT = 75;
     private final int MAP_DEFAULT_ROW = 50;
-    private final int MAP_DEFAULT_COL = 40;
+    private final int MAP_DEFAULT_COL = 50;
+    private final int BORDER_LEN_MOVE_VIEWPORT = 100;
     private double zoomScale;
-    private int selectedItem;
     private BufferedImage miniMap;
     private final int MINI_MAP_WIDTH = 320;
     private final int MINI_MAP_HEIGHT = 180;
@@ -37,6 +38,7 @@ public class Main extends Frame {
     private BufferedImage map;
     private Image waterImage;
     private Image []landImages;
+    private boolean isViewPortMoving;
 
     private enum Cell{
        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
@@ -44,28 +46,24 @@ public class Main extends Frame {
 
     public Main(){
         super();
+        isViewPortMoving = false;
+        mapViewPortWidth = ((int) getScreenDimension().getWidth()) - MINI_MAP_WIDTH;
+        mapViewPortHeight = ((int) getScreenDimension().getHeight()) - MINI_MAP_HEIGHT;
         initMap();
         loadImages();
-        putElements();
+        setMapDimension();
+        makeMap();
         drawMiniMap();
 
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                int x = ((int) mouseEvent.getPoint().getLocation().getX());
-                int y = ((int) mouseEvent.getPoint().getLocation().getY());
-                x += mapViewportX;
-                y += mapViewportY;
-                x /= zoomScale;
-                y /= zoomScale;
-                int row = y / CELL_DEFAULT_HEIGHT;
-                int col = x / CELL_DEFAULT_WIDTH;
-                changeItem(col,row,Cell.LAND);
+                clickOnMap(mouseEvent.getX(),mouseEvent.getY());
             }
 
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-
+                System.out.println("mousepressed");
             }
 
             @Override
@@ -86,20 +84,83 @@ public class Main extends Frame {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
-                int x = ((int) mouseEvent.getPoint().getLocation().getX());
-                int y = ((int) mouseEvent.getPoint().getLocation().getY());
-                x += mapViewportX;
-                y += mapViewportY;
-                x /= zoomScale;
-                y /= zoomScale;
-                int row = y / CELL_DEFAULT_HEIGHT;
-                int col = x / CELL_DEFAULT_WIDTH;
-                changeItem(col,row,Cell.LAND);
+                clickOnMap(mouseEvent.getX(),mouseEvent.getY());
+                System.out.println("mousedragged");
             }
 
             @Override
             public void mouseMoved(MouseEvent mouseEvent) {
-
+                Runnable r = null;
+                if (mouseEvent.getY() < BORDER_LEN_MOVE_VIEWPORT){
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving){
+                                moveViewportUp();
+                            }
+                        }
+                    };
+                }else if ((mouseEvent.getY() > mapViewPortHeight - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getY() < mapViewPortHeight)){
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving){
+                                moveViewportDown();
+                            }
+                        }
+                    };
+                }else if (mouseEvent.getX() < BORDER_LEN_MOVE_VIEWPORT){
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving){
+                                moveViewportLeft();
+                            }
+                        }
+                    };
+                }else if ((mouseEvent.getX() > mapViewPortWidth - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getX() < mapViewPortWidth)){
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving){
+                                moveViewportRight();
+                            }
+                        }
+                    };
+                }else {
+                    isViewPortMoving = false;
+                }
+                if (r != null){
+                    (new Thread(r)).start();
+                }
             }
         });
         addKeyListener(new KeyListener() {
@@ -149,8 +210,15 @@ public class Main extends Frame {
         });
     }
 
-
-
+    private void clickOnMap(int x, int y){
+        x += mapViewportX;
+        y += mapViewportY;
+        x /= zoomScale;
+        y /= zoomScale;
+        int row = y / CELL_DEFAULT_HEIGHT;
+        int col = x / CELL_DEFAULT_WIDTH;
+        changeItem(col,row,Cell.LAND);
+    }
     private void zoomIn(){
         if (zoomScale < 3) {
             zoomScale += 0.25;
@@ -158,7 +226,6 @@ public class Main extends Frame {
         }
         drawMiniMap();
     }
-
     private void zoomOut(){
         if (zoomScale > 0.1) {
             zoomScale -= 0.25;
@@ -167,28 +234,50 @@ public class Main extends Frame {
         drawMiniMap();
     }
 
-    private void moveViewportLeft(){
-        mapViewportX -= 10;
-        drawMiniMap();
-        repaint();
+    private void addCol(){
+        cols ++;
+        setMapDimension();
+    }
+    private void addRow(){
+        rows ++;
+        setMapDimension();
+    }
+    private void removeCol(){
+        cols --;
+        setMapDimension();
+    }
+    private void removeRow(){
+        rows --;
+        setMapDimension();
     }
 
+    private void moveViewportLeft() {
+        if (mapViewportX > 0) {
+            mapViewportX -= 10;
+            drawMiniMap();
+            repaint();
+        }
+    }
     private void moveViewportRight(){
-        mapViewportX += 10;
-        drawMiniMap();
-        repaint();
+        if (mapViewportX + mapViewPortWidth < mapHeight) {
+            mapViewportX += 10;
+            drawMiniMap();
+            repaint();
+        }
     }
-
     private void moveViewportUp(){
-        mapViewportY -= 10;
-        drawMiniMap();
-        repaint();
+        if (mapViewportY > 0) {
+            mapViewportY -= 10;
+            drawMiniMap();
+            repaint();
+        }
     }
-
     private void moveViewportDown(){
-        mapViewportY += 10;
-        drawMiniMap();
-        repaint();
+        if (mapViewportY + mapViewPortHeight < mapWidth) {
+            mapViewportY += 10;
+            drawMiniMap();
+            repaint();
+        }
     }
 
     private Image getLandImage(int row, int col){
@@ -244,6 +333,12 @@ public class Main extends Frame {
             e.printStackTrace();
         }
     }
+    private void setMapDimension(){
+        mapWidth = cols * CELL_DEFAULT_WIDTH;
+        mapHeight = rows * CELL_DEFAULT_HEIGHT;
+        Cell [][]mapMatrixTemp = new Cell[rows][cols];
+
+    }
     private void initMap(){
         zoomScale = 1;
         mapViewportX = 0;
@@ -259,14 +354,15 @@ public class Main extends Frame {
             }
         }
 
+
     }
 
     private void drawMiniMap(){
-        miniMap = new BufferedImage(cols * CELL_DEFAULT_WIDTH ,rows * CELL_DEFAULT_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
+        miniMap = new BufferedImage(mapWidth ,mapHeight ,BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = miniMap.getGraphics();
         graphics.drawImage(map,0,0,null);
-        int viewPortRectWidth = ((int) (getWidth() / zoomScale));
-        int viewPortRectHeight = ((int) (getHeight() / zoomScale));
+        int viewPortRectWidth = ((int) (mapViewPortWidth / zoomScale));
+        int viewPortRectHeight = ((int) (mapViewPortHeight / zoomScale));
         graphics.setColor(new Color((float) 0.9,(float) 0.2,(float)0.2, (float) 0.1));
         graphics.fillRect(mapViewportX,mapViewportY,viewPortRectWidth,viewPortRectHeight);
         graphics.dispose();
@@ -274,6 +370,7 @@ public class Main extends Frame {
 
     private void changeItem(int col, int row, Cell content){
         Graphics graphics = map.createGraphics();
+        Graphics graphics1 = miniMap.createGraphics();
         Image image = null;
         if (content == Cell.WATER)
             image = waterImage;
@@ -283,25 +380,29 @@ public class Main extends Frame {
             // To drawing the image of the neighbour cells
             if ((col != 0) && (mapMatrix[row][col - 1] == Cell.LAND)){
                 graphics.drawImage(getLandImage(row,col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                graphics1.drawImage(getLandImage(row,col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
             }
             if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.LAND)){
                 graphics.drawImage(getLandImage(row,col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                graphics1.drawImage(getLandImage(row,col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
             }
             if ((row != 0) && (mapMatrix[row - 1][col] == Cell.LAND)){
                 graphics.drawImage(getLandImage(row - 1,col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                graphics1.drawImage(getLandImage(row - 1,col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
             }
             if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.LAND)){
                 graphics.drawImage(getLandImage(row + 1,col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                graphics1.drawImage(getLandImage(row + 1,col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
             }
         }
 
         graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+        graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
         repaint();
     }
 
     private void makeMap(){
-
-        map = new BufferedImage(cols * CELL_DEFAULT_WIDTH ,rows * CELL_DEFAULT_HEIGHT ,BufferedImage.TYPE_INT_ARGB);
+        map = new BufferedImage(mapWidth ,mapHeight ,BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = map.createGraphics();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -322,23 +423,23 @@ public class Main extends Frame {
     }
     @Override
     public void putElements() {
-        makeMap();
+
+
     }
 
     @Override
     public void paint(Graphics graphics) {
-        int width = ((int) (cols * CELL_DEFAULT_WIDTH * zoomScale));
-        int height = ((int) (rows * CELL_DEFAULT_HEIGHT * zoomScale));
+        int width = ((int) (mapWidth * zoomScale));
+        int height = ((int) (mapHeight * zoomScale));
         int x = -1 * mapViewportX;
         int y = -1 * mapViewportY;
         graphics.drawImage(map,x,y,width,height,null);
         graphics.drawImage(miniMap,
-                (int)getScreenDimension().getWidth() - MINI_MAP_WIDTH,
-                (int)getScreenDimension().getHeight() - MINI_MAP_HEIGHT,
+                mapViewPortWidth,
+                mapViewPortHeight,
                 MINI_MAP_WIDTH
                 , MINI_MAP_HEIGHT
                 , null);
     }
-
 
 }
