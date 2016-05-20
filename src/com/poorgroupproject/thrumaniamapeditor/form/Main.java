@@ -35,12 +35,11 @@ public class Main extends Frame {
     private final int MINI_MAP_HEIGHT = 180;
     private Cell [][] mapMatrix;
     private BufferedImage map;
-    private Image []itemImages;
-
-    private Image []landImage;
+    private Image waterImage;
+    private Image []landImages;
 
     private enum Cell{
-       WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE
+       WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
     } ;
 
     public Main(){
@@ -61,7 +60,7 @@ public class Main extends Frame {
                 y /= zoomScale;
                 int row = y / CELL_DEFAULT_HEIGHT;
                 int col = x / CELL_DEFAULT_WIDTH;
-                changeItem(col,row,Cell.WATER);
+                changeItem(col,row,Cell.LAND);
             }
 
             @Override
@@ -95,7 +94,7 @@ public class Main extends Frame {
                 y /= zoomScale;
                 int row = y / CELL_DEFAULT_HEIGHT;
                 int col = x / CELL_DEFAULT_WIDTH;
-                changeItem(col,row,Cell.WATER);
+                changeItem(col,row,Cell.LAND);
             }
 
             @Override
@@ -192,30 +191,53 @@ public class Main extends Frame {
         repaint();
     }
 
-    private void loadImages(){
+    private Image getLandImage(int row, int col){
         /**
-         * itemImages[0] -> water
+         * U1U
+         * 8X2
+         * U4U
          */
-        itemImages = new Image[13];
+        int counter = 0;
+
+        if ((row != 0) && (mapMatrix[row - 1][col] == Cell.LAND)){
+            counter += 1;
+        }
+        if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.LAND)){
+            counter += 4;
+        }
+        if ((col != 0) && (mapMatrix[row][col - 1] == Cell.LAND)){
+            counter += 8;
+        }
+        if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.LAND)){
+            counter += 2;
+        }
+        return landImages[counter];
+    }
+    private void loadImages(){
+        landImages = new Image[16];
         try {
+            waterImage =    ImageIO.read(new File("resource/image/tile/water.png"));
+            landImages[0] = ImageIO.read(new File("resource/image/tile/no.jpg"));
+            landImages[1] = ImageIO.read(new File("resource/image/tile/od.png"));
+            landImages[2] = ImageIO.read(new File("resource/image/tile/or.png"));
+            landImages[3] = ImageIO.read(new File("resource/image/tile/sld.png"));
+            landImages[4] = ImageIO.read(new File("resource/image/tile/ou.png"));
+            landImages[5] = ImageIO.read(new File("resource/image/tile/ocntrud.png"));
+            landImages[6] = ImageIO.read(new File("resource/image/tile/slu.png"));
+            landImages[7] = ImageIO.read(new File("resource/image/tile/sl.png"));
+            landImages[8] = ImageIO.read(new File("resource/image/tile/ol.png"));
+            landImages[9] = ImageIO.read(new File("resource/image/tile/srd.png"));
+            landImages[10] = ImageIO.read(new File("resource/image/tile/ocntrlr.png"));
+            landImages[11] = ImageIO.read(new File("resource/image/tile/sd.png"));
+            landImages[12] = ImageIO.read(new File("resource/image/tile/sru.png"));
+            landImages[13] = ImageIO.read(new File("resource/image/tile/sr.png"));
+            landImages[14] = ImageIO.read(new File("resource/image/tile/su.png"));
+            landImages[15] = ImageIO.read(new File("resource/image/tile/cntr.png"));
 
-            itemImages[0] = ImageIO.read(new File("resource/image/tile/emp.png"));
-            itemImages[1] = ImageIO.read(new File("resource/image/tile/cntr.png"));
-            itemImages[2] = ImageIO.read(new File("resource/image/tile/ocntr.png"));
-            itemImages[3] = ImageIO.read(new File("resource/image/tile/od.png"));
-            itemImages[4] = ImageIO.read(new File("resource/image/tile/ou.png"));
-            itemImages[5] = ImageIO.read(new File("resource/image/tile/sd.png"));
-            itemImages[6] = ImageIO.read(new File("resource/image/tile/sl.png"));
-            itemImages[7] = ImageIO.read(new File("resource/image/tile/sld.png"));
-            itemImages[8] = ImageIO.read(new File("resource/image/tile/slu.png"));
-            itemImages[9] = ImageIO.read(new File("resource/image/tile/sr.png"));
-            itemImages[10] = ImageIO.read(new File("resource/image/tile/srd.png"));
-            itemImages[11] = ImageIO.read(new File("resource/image/tile/sru.png"));
-            itemImages[12] = ImageIO.read(new File("resource/image/tile/su.png"));
-
-            //Scaling the image
-            for (int i = 0; i < itemImages.length; i++) {
-                itemImages[i] = itemImages[i].getScaledInstance(CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,Image.SCALE_DEFAULT);
+            //Scaling images
+            waterImage = waterImage.getScaledInstance(CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,Image.SCALE_DEFAULT);
+            for (int i = 0; i < landImages.length; i++) {
+                landImages[i] = landImages[i].getScaledInstance(CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,Image.SCALE_DEFAULT);
             }
 
         } catch (IOException e) {
@@ -252,7 +274,26 @@ public class Main extends Frame {
 
     private void changeItem(int col, int row, Cell content){
         Graphics graphics = map.createGraphics();
-        Image image = itemImages[1];
+        Image image = null;
+        if (content == Cell.WATER)
+            image = waterImage;
+        else if (content == Cell.LAND){
+            image = getLandImage(row,col);
+            mapMatrix[row][col] = content;
+            // To drawing the image of the neighbour cells
+            if ((col != 0) && (mapMatrix[row][col - 1] == Cell.LAND)){
+                graphics.drawImage(getLandImage(row,col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+            }
+            if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.LAND)){
+                graphics.drawImage(getLandImage(row,col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+            }
+            if ((row != 0) && (mapMatrix[row - 1][col] == Cell.LAND)){
+                graphics.drawImage(getLandImage(row - 1,col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+            }
+            if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.LAND)){
+                graphics.drawImage(getLandImage(row + 1,col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+            }
+        }
 
         graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
         repaint();
@@ -267,10 +308,10 @@ public class Main extends Frame {
                 Image image = null;
                 switch (mapMatrix[i][j]){
                     case WATER:
-                        image = itemImages[0];
+                        image = waterImage;
                         break;
                     case LAND:
-                        image = itemImages[1];
+                        changeItem(j,i,Cell.LAND);
                         break;
                 }
 
@@ -299,10 +340,5 @@ public class Main extends Frame {
                 , null);
     }
 
-
-}
-
-class Action{
-    private int actionType;
 
 }
