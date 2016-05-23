@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Stack;
 
 /**
  * @author ahmad
@@ -29,6 +30,10 @@ public class Main extends Frame {
     private final int CELL_DEFAULT_HEIGHT = 75;
     private final int MAP_DEFAULT_ROW = 50;
     private final int MAP_DEFAULT_COL = 50;
+    private final int MAP_MIN_ROW = 15;
+    private final int MAP_MIN_COL = 26;
+    private final int MAP_MAX_ROW = 120;
+    private final int MAP_MAX_COL = 208;
     private final int BORDER_LEN_MOVE_VIEWPORT = 100;
     private double zoomScale;
     private BufferedImage miniMap;
@@ -40,7 +45,10 @@ public class Main extends Frame {
     private Image []landImages;
     private boolean isViewPortMoving;
 
-    private enum Cell{
+    private Stack<Action> undo;
+    private Stack<Action> redo;
+
+    public enum Cell{
        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
     } ;
 
@@ -49,6 +57,9 @@ public class Main extends Frame {
         isViewPortMoving = false;
         mapViewPortWidth = ((int) getScreenDimension().getWidth()) - MINI_MAP_WIDTH;
         mapViewPortHeight = ((int) getScreenDimension().getHeight()) - MINI_MAP_HEIGHT;
+        undo = new Stack<>();
+        redo = new Stack<>();
+
         initMap();
         loadImages();
         setMapDimension();
@@ -187,6 +198,18 @@ public class Main extends Frame {
                     case KeyEvent.VK_ESCAPE:
                         System.exit(0);
                         break;
+                    case KeyEvent.VK_A:
+                        addRow();
+                        break;
+                    case KeyEvent.VK_S:
+                        addCol();
+                        break;
+                    case KeyEvent.VK_D:
+                        removeRow();
+                        break;
+                    case KeyEvent.VK_F:
+                        removeCol();
+                        break;
                 }
             }
 
@@ -235,20 +258,28 @@ public class Main extends Frame {
     }
 
     private void addCol(){
-        cols ++;
-        setMapDimension();
+        if (cols < MAP_MAX_COL) {
+            cols++;
+            setMapDimension();
+        }
     }
     private void addRow(){
-        rows ++;
-        setMapDimension();
+        if (rows < MAP_MAX_ROW) {
+            rows++;
+            setMapDimension();
+        }
     }
     private void removeCol(){
-        cols --;
-        setMapDimension();
+        if (cols > MAP_MIN_COL) {
+            cols--;
+            setMapDimension();
+        }
     }
     private void removeRow(){
-        rows --;
-        setMapDimension();
+        if (rows < MAP_MAX_ROW){
+            rows --;
+            setMapDimension();
+        }
     }
 
     private void moveViewportLeft() {
@@ -337,7 +368,28 @@ public class Main extends Frame {
         mapWidth = cols * CELL_DEFAULT_WIDTH;
         mapHeight = rows * CELL_DEFAULT_HEIGHT;
         Cell [][]mapMatrixTemp = new Cell[rows][cols];
+        int lastRows = mapMatrix.length;
+        int lastCols = mapMatrix[0].length;
+        if (lastCols > cols) {
+            for (int i = 0; i < lastRows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    //mapMatrixTemp  mapMatrix[i][j]
+                }
+            }
+        }
+        if (lastRows > rows){
+            for (int i = 0; i < lastRows; i++) {
+                for (int j = 0; j < lastCols; j++) {
 
+                }
+            }
+        }
+        if (lastCols < cols){
+
+        }
+        if (lastRows < rows){
+
+        }
     }
     private void initMap(){
         zoomScale = 1;
@@ -440,6 +492,26 @@ public class Main extends Frame {
                 MINI_MAP_WIDTH
                 , MINI_MAP_HEIGHT
                 , null);
+    }
+}
+
+class Action{
+
+    private enum  ActionType{
+        ADD_ROW, RM_ROW, ADD_COL, RM_COL, CHG_MAP
+    };
+
+    ActionType actionType;
+    Main.Cell [][]matrix;
+
+    public Action(ActionType actionType){
+        this.actionType = actionType;
+        if (actionType == ActionType.CHG_MAP)
+            System.err.println("Invalid action type");
+    }
+
+    public Action(Main.Cell [][]matrix, int col, int row){
+        actionType = ActionType.CHG_MAP;
     }
 
 }
