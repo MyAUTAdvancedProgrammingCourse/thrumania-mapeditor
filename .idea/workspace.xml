@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="05129503-1cfb-49e7-9711-d68c18d726c0" name="Default" comment="" />
+    <list default="true" id="05129503-1cfb-49e7-9711-d68c18d726c0" name="Default" comment="Implementing the move method">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MapPanel.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ThrumaniaMapEditor/com/poorgroupproject/thrumaniamapeditor/MapEditor$1.class" afterPath="$PROJECT_DIR$/out/production/ThrumaniaMapEditor/com/poorgroupproject/thrumaniamapeditor/MapEditor$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ThrumaniaMapEditor/com/poorgroupproject/thrumaniamapeditor/MapEditor.class" afterPath="$PROJECT_DIR$/out/production/ThrumaniaMapEditor/com/poorgroupproject/thrumaniamapeditor/MapEditor.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ThrumaniaMapEditor/com/poorgroupproject/thrumaniamapeditor/form/Frame.class" afterPath="$PROJECT_DIR$/out/production/ThrumaniaMapEditor/com/poorgroupproject/thrumaniamapeditor/form/Frame.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ThrumaniaMapEditor.iml" afterPath="$PROJECT_DIR$/ThrumaniaMapEditor.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java" afterPath="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java" />
+    </list>
     <ignored path="ThrumaniaMapEditor.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -23,27 +32,68 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Frame.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+      <file leaf-file-name="MapEditor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="254">
-              <caret line="34" column="88" selection-start-line="34" selection-start-column="88" selection-end-line="34" selection-end-column="88" />
+            <state relative-caret-position="252">
+              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="773">
+              <caret line="385" column="71" selection-start-line="385" selection-start-column="71" selection-end-line="385" selection-end-column="71" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1437#1438#0" expanded="true" />
-                <element signature="e#1469#1470#0" expanded="true" />
+                <element signature="class#2422:3012" expanded="false" />
+                <element signature="class#3050:6538" expanded="false" />
+                <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+                <element signature="class#3450:4059" expanded="false" />
+                <element signature="class#4227:4838" expanded="false" />
+                <element signature="class#4941:5552" expanded="false" />
+                <element signature="class#5718:6330" expanded="false" />
+                <element signature="class#7987:8397" expanded="false" />
+                <element signature="e#8618#8619#0" expanded="true" />
+                <element signature="e#8642#8643#0" expanded="true" />
+                <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+                <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+                <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+                <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+                <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+                <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+                <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+                <element signature="method#initMap#0;class#Main#0" expanded="false" />
+                <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+                <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+                <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+                <element signature="method#putElements#0;class#Main#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MapEditor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java">
+      <file leaf-file-name="ImageIO.class" pinned="false" current-in-tab="false">
+        <entry file="jar:///usr/lib/jvm/default-java/jre/lib/rt.jar!/javax/imageio/ImageIO.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="12" column="41" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
+            <state relative-caret-position="8244">
+              <caret line="500" column="0" selection-start-line="500" selection-start-column="0" selection-end-line="500" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Frame.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="954">
+              <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#2187#2188#0" expanded="true" />
+                <element signature="e#2225#2226#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -58,6 +108,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
       <projects_view />
@@ -70,7 +123,9 @@
         <option value="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/MapEditor.java" />
         <option value="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Form.java" />
         <option value="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MapPanel.java" />
         <option value="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java" />
+        <option value="$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java" />
       </list>
     </option>
   </component>
@@ -111,6 +166,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -168,6 +226,58 @@
               <option name="myItemId" value="form" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Main.java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ThrumaniaMapEditor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ThrumaniaMapEditor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thrumaniamapeditor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="form" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ThrumaniaMapEditor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ThrumaniaMapEditor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thrumaniamapeditor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="form" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="element" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -189,9 +299,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -649,6 +756,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="05129503-1cfb-49e7-9711-d68c18d726c0" name="Default" comment="" />
@@ -659,12 +769,116 @@
       <workItem from="1463393313498" duration="323000" />
       <workItem from="1463393800185" duration="587000" />
       <workItem from="1463394413935" duration="159000" />
-      <workItem from="1463395860486" duration="166000" />
+      <workItem from="1463395860486" duration="629000" />
+      <workItem from="1463396502624" duration="25000" />
+      <workItem from="1463400077260" duration="6000" />
+      <workItem from="1463416656265" duration="1481000" />
+      <workItem from="1463418636347" duration="5528000" />
+      <workItem from="1463425921309" duration="2259000" />
+      <workItem from="1463460757602" duration="605000" />
+      <workItem from="1463461379501" duration="2470000" />
+      <workItem from="1463463980941" duration="6117000" />
+      <workItem from="1463477424656" duration="2196000" />
+      <workItem from="1463487101672" duration="2332000" />
+      <workItem from="1463491292341" duration="1484000" />
+      <workItem from="1463500330271" duration="42000" />
+      <workItem from="1463501793269" duration="38000" />
+      <workItem from="1463505493584" duration="1442000" />
+      <workItem from="1463548921524" duration="104000" />
+      <workItem from="1463549794460" duration="84000" />
+      <workItem from="1463552732609" duration="2474000" />
+      <workItem from="1463560616216" duration="784000" />
+      <workItem from="1463639590260" duration="1108000" />
+      <workItem from="1463641802469" duration="607000" />
+      <workItem from="1463645811540" duration="35000" />
+      <workItem from="1463654672561" duration="1610000" />
+      <workItem from="1463666430887" duration="2817000" />
+      <workItem from="1463670109871" duration="1419000" />
+      <workItem from="1463681873564" duration="599000" />
+      <workItem from="1463686050294" duration="91000" />
+      <workItem from="1463725578003" duration="6755000" />
+      <workItem from="1463732499510" duration="23000" />
+      <workItem from="1463732537505" duration="3016000" />
+      <workItem from="1463737239866" duration="12000" />
+      <workItem from="1463759084291" duration="9000" />
+      <workItem from="1463767419348" duration="22000" />
+      <workItem from="1463805942053" duration="52000" />
+      <workItem from="1463824134923" duration="12000" />
+      <workItem from="1463827410893" duration="4476000" />
+      <workItem from="1463832816665" duration="520000" />
+      <workItem from="1463837081069" duration="1493000" />
+      <workItem from="1463856799621" duration="19000" />
+      <workItem from="1463908798264" duration="13000" />
+      <workItem from="1463984200853" duration="608000" />
+      <workItem from="1463985381905" duration="313000" />
+      <workItem from="1463992176316" duration="11000" />
+      <workItem from="1463999032079" duration="57000" />
+      <workItem from="1464001130441" duration="17000" />
+      <workItem from="1464007357933" duration="5744000" />
+      <workItem from="1464069492709" duration="2452000" />
+      <workItem from="1464077078603" duration="104000" />
     </task>
+    <task id="LOCAL-00001" summary="Implementing the map">
+      <created>1463427527184</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1463427527184</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Implementing the move method">
+      <created>1463462873408</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1463462873408</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Implementing the move method">
+      <created>1463463840382</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1463463840382</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Implementing the move method">
+      <created>1463492260172</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1463492260172</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Implementing minimap">
+      <created>1463668990850</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1463668990850</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Implementing the intelligence in the land image putting">
+      <created>1463728905959</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1463728905959</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Implementing add/remve row/col">
+      <created>1463733875758</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1463733875758</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Implementing the move method">
+      <created>1463984803661</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1463984803661</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1235000" />
+    <option name="totallyTimeSpent" value="65183000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
@@ -672,36 +886,56 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24959569" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26091644" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39979655" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960325" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implementing the map" />
+    <MESSAGE value="Implementing minimap" />
+    <MESSAGE value="Implementing the intelligence in the land image putting" />
+    <MESSAGE value="Implementing add/remve row/col" />
+    <MESSAGE value="Implementing the move method" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementing the move method" />
+  </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="8" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="antWorkspaceConfiguration">
@@ -709,14 +943,194 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MapPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="37" column="10" selection-start-line="37" selection-start-column="10" selection-end-line="37" selection-end-column="10" />
+        <state relative-caret-position="666">
+          <caret line="40" column="66" selection-start-line="40" selection-start-column="66" selection-end-line="40" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1437#1438#0" expanded="true" />
-            <element signature="e#1469#1470#0" expanded="true" />
+            <element signature="class#2422:3012" expanded="false" />
+            <element signature="class#3050:6538" expanded="false" />
+            <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+            <element signature="class#3450:4059" expanded="false" />
+            <element signature="class#4227:4838" expanded="false" />
+            <element signature="class#4941:5552" expanded="false" />
+            <element signature="class#5718:6330" expanded="false" />
+            <element signature="class#7987:8397" expanded="false" />
+            <element signature="e#8618#8619#0" expanded="true" />
+            <element signature="e#8642#8643#0" expanded="true" />
+            <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+            <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+            <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+            <element signature="method#initMap#0;class#Main#0" expanded="false" />
+            <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+            <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+            <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+            <element signature="method#putElements#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MapPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="666">
+          <caret line="40" column="66" selection-start-line="40" selection-start-column="66" selection-end-line="40" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="class#2422:3012" expanded="false" />
+            <element signature="class#3050:6538" expanded="false" />
+            <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+            <element signature="class#3450:4059" expanded="false" />
+            <element signature="class#4227:4838" expanded="false" />
+            <element signature="class#4941:5552" expanded="false" />
+            <element signature="class#5718:6330" expanded="false" />
+            <element signature="class#7987:8397" expanded="false" />
+            <element signature="e#8618#8619#0" expanded="true" />
+            <element signature="e#8642#8643#0" expanded="true" />
+            <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+            <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+            <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+            <element signature="method#initMap#0;class#Main#0" expanded="false" />
+            <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+            <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+            <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+            <element signature="method#putElements#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MapPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="12" column="38" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="class#2422:3012" expanded="false" />
+            <element signature="class#3050:6538" expanded="false" />
+            <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+            <element signature="class#3450:4059" expanded="false" />
+            <element signature="class#4227:4838" expanded="false" />
+            <element signature="class#4941:5552" expanded="false" />
+            <element signature="class#5718:6330" expanded="false" />
+            <element signature="class#7987:8397" expanded="false" />
+            <element signature="e#8618#8619#0" expanded="true" />
+            <element signature="e#8642#8643#0" expanded="true" />
+            <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+            <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+            <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+            <element signature="method#initMap#0;class#Main#0" expanded="false" />
+            <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+            <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+            <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+            <element signature="method#putElements#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MapPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="class#2422:3012" expanded="false" />
+            <element signature="class#3050:6538" expanded="false" />
+            <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+            <element signature="class#3450:4059" expanded="false" />
+            <element signature="class#4227:4838" expanded="false" />
+            <element signature="class#4941:5552" expanded="false" />
+            <element signature="class#5718:6330" expanded="false" />
+            <element signature="class#7987:8397" expanded="false" />
+            <element signature="e#8618#8619#0" expanded="true" />
+            <element signature="e#8642#8643#0" expanded="true" />
+            <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+            <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+            <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+            <element signature="method#initMap#0;class#Main#0" expanded="false" />
+            <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+            <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+            <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+            <element signature="method#putElements#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -725,9 +1139,116 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="class#2422:3012" expanded="false" />
+            <element signature="class#3050:6538" expanded="false" />
+            <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+            <element signature="class#3450:4059" expanded="false" />
+            <element signature="class#4227:4838" expanded="false" />
+            <element signature="class#4941:5552" expanded="false" />
+            <element signature="class#5718:6330" expanded="false" />
+            <element signature="class#7987:8397" expanded="false" />
+            <element signature="e#8618#8619#0" expanded="true" />
+            <element signature="e#8642#8643#0" expanded="true" />
+            <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+            <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+            <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+            <element signature="method#initMap#0;class#Main#0" expanded="false" />
+            <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+            <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+            <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+            <element signature="method#putElements#0;class#Main#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="class#2422:3012" expanded="false" />
+            <element signature="class#3050:6538" expanded="false" />
+            <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+            <element signature="class#3450:4059" expanded="false" />
+            <element signature="class#4227:4838" expanded="false" />
+            <element signature="class#4941:5552" expanded="false" />
+            <element signature="class#5718:6330" expanded="false" />
+            <element signature="class#7987:8397" expanded="false" />
+            <element signature="e#8618#8619#0" expanded="true" />
+            <element signature="e#8642#8643#0" expanded="true" />
+            <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+            <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+            <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+            <element signature="method#initMap#0;class#Main#0" expanded="false" />
+            <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+            <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+            <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+            <element signature="method#putElements#0;class#Main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="648">
+          <caret line="37" column="10" selection-start-line="37" selection-start-column="10" selection-end-line="37" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -736,11 +1257,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1437#1438#0" expanded="true" />
-            <element signature="e#1469#1470#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -748,9 +1264,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -763,24 +1277,144 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/tiles/world/decor/0000.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/tiles/world/ground/0009.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/tiles/world/ground/0008.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/tiles/world/ground/0007.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/misc/ct.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/misc/chargement.gif">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/misc/centrer.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/default-java/jre/lib/rt.jar!/java/awt/image/DataBufferInt.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/simerion/planets/1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MiniMap.java" />
+    <entry file="file://$PROJECT_DIR$/resource/image/tile/slu.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/tile/sr.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/tile/emp.png" />
+    <entry file="file://$PROJECT_DIR$/resource/image/tile/ocntrlr.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/element/MapPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="16" column="25" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resource/image/tile/od.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/default-java/jre/lib/rt.jar!/java/awt/image/BufferedImage.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/MapEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="41" selection-start-line="12" selection-start-column="41" selection-end-line="12" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="252">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/default-java/jre/lib/rt.jar!/javax/imageio/ImageIO.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8244">
+          <caret line="500" column="0" selection-start-line="500" selection-start-column="0" selection-end-line="500" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Frame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="34" column="88" selection-start-line="34" selection-start-column="88" selection-end-line="34" selection-end-column="88" />
+        <state relative-caret-position="954">
+          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+          <folding>
+            <element signature="e#2187#2188#0" expanded="true" />
+            <element signature="e#2225#2226#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/poorgroupproject/thrumaniamapeditor/form/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="773">
+          <caret line="385" column="71" selection-start-line="385" selection-start-column="71" selection-end-line="385" selection-end-column="71" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1437#1438#0" expanded="true" />
-            <element signature="e#1469#1470#0" expanded="true" />
+            <element signature="class#2422:3012" expanded="false" />
+            <element signature="class#3050:6538" expanded="false" />
+            <element signature="method#mouseMoved#0;class#3050:6538" expanded="false" />
+            <element signature="class#3450:4059" expanded="false" />
+            <element signature="class#4227:4838" expanded="false" />
+            <element signature="class#4941:5552" expanded="false" />
+            <element signature="class#5718:6330" expanded="false" />
+            <element signature="class#7987:8397" expanded="false" />
+            <element signature="e#8618#8619#0" expanded="true" />
+            <element signature="e#8642#8643#0" expanded="true" />
+            <element signature="method#zoomIn#0;class#Main#0" expanded="false" />
+            <element signature="method#zoomOut#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportLeft#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportRight#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportUp#0;class#Main#0" expanded="false" />
+            <element signature="method#moveViewportDown#0;class#Main#0" expanded="false" />
+            <element signature="method#getLandImage#0;class#Main#0" expanded="false" />
+            <element signature="method#initMap#0;class#Main#0" expanded="false" />
+            <element signature="method#drawMiniMap#0;class#Main#0" expanded="false" />
+            <element signature="method#changeItem#0;class#Main#0" expanded="false" />
+            <element signature="method#makeMap#0;class#Main#0" expanded="false" />
+            <element signature="method#putElements#0;class#Main#0" expanded="false" />
           </folding>
         </state>
       </provider>

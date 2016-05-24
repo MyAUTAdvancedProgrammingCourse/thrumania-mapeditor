@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author ahmad
@@ -25,6 +28,9 @@ public class Main extends Frame {
     private int mapViewPortWidth;
     private int mapViewPortHeight;
 
+    private int screenWidth;
+    private int screenHeight;
+
 
     private final int CELL_DEFAULT_WIDTH = 75;
     private final int CELL_DEFAULT_HEIGHT = 75;
@@ -36,21 +42,32 @@ public class Main extends Frame {
     private final int MAP_MAX_COL = 208;
     private final int BORDER_LEN_MOVE_VIEWPORT = 100;
     private double zoomScale;
-    private BufferedImage miniMap;
+
     private final int MINI_MAP_WIDTH = 320;
     private final int MINI_MAP_HEIGHT = 180;
+
     private Cell [][] mapMatrix;
+    private BufferedImage miniMap;
+
     private BufferedImage map;
+
     private Image waterImage;
     private Image []landImages;
+    private Image treeImage;
+
     private boolean isViewPortMoving;
 
     private Stack<Action> undo;
     private Stack<Action> redo;
+    private int mode;
 
+    private enum PointerMode{
+        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
+    };
     public enum Cell{
-       WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
-    } ;
+        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
+
+    };
 
     public Main(){
         super();
@@ -60,6 +77,10 @@ public class Main extends Frame {
         undo = new Stack<>();
         redo = new Stack<>();
 
+        screenWidth = ((int) getScreenDimension().getWidth());
+        screenHeight = ((int) getScreenDimension().getHeight());
+        System.out.println(screenHeight);
+        System.out.println(screenWidth);
         initMap();
         loadImages();
         setMapDimension();
@@ -74,7 +95,7 @@ public class Main extends Frame {
 
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                System.out.println("mousepressed");
+
             }
 
             @Override
@@ -96,7 +117,6 @@ public class Main extends Frame {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
                 clickOnMap(mouseEvent.getX(),mouseEvent.getY());
-                System.out.println("mousedragged");
             }
 
             @Override
@@ -233,6 +253,14 @@ public class Main extends Frame {
         });
     }
 
+    private final byte IN_MINIMAP = 1;
+    private final byte IN_MAP = 2;
+    private final byte IN_LEFT_PANEL = 3;
+    private final byte IN_BUTTOM_PANEL = 4;
+
+    private byte detectMousePosition(int x, int y){
+        return 0;
+    }
     private void clickOnMap(int x, int y){
         x += mapViewportX;
         y += mapViewportY;
@@ -240,6 +268,7 @@ public class Main extends Frame {
         y /= zoomScale;
         int row = y / CELL_DEFAULT_HEIGHT;
         int col = x / CELL_DEFAULT_WIDTH;
+
         changeItem(col,row,Cell.LAND);
     }
     private void zoomIn(){
@@ -337,7 +366,7 @@ public class Main extends Frame {
         landImages = new Image[16];
         try {
             waterImage =    ImageIO.read(new File("resource/image/tile/water.png"));
-            landImages[0] = ImageIO.read(new File("resource/image/tile/no.jpg"));
+            landImages[0] = ImageIO.read(new File("resource/image/tile/no.png"));
             landImages[1] = ImageIO.read(new File("resource/image/tile/od.png"));
             landImages[2] = ImageIO.read(new File("resource/image/tile/or.png"));
             landImages[3] = ImageIO.read(new File("resource/image/tile/sld.png"));
@@ -353,6 +382,9 @@ public class Main extends Frame {
             landImages[13] = ImageIO.read(new File("resource/image/tile/sr.png"));
             landImages[14] = ImageIO.read(new File("resource/image/tile/su.png"));
             landImages[15] = ImageIO.read(new File("resource/image/tile/cntr.png"));
+
+            treeImage =     ImageIO.read(new File("resource/image/item/"));
+
 
             //Scaling images
             waterImage = waterImage.getScaledInstance(CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,Image.SCALE_DEFAULT);
