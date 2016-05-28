@@ -1,5 +1,7 @@
 package com.poorgroupproject.thrumaniamapeditor.form.element;
 
+import com.poorgroupproject.thrumaniamapeditor.Path;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -37,19 +39,19 @@ public class MyFrame extends JFrame implements ActionListener{
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         //setResizable(false);
 
-        tree[0]=new ImageIcon("tree0.png");
-        tree[1]=new ImageIcon("tree1.png");
-        tree[2]=new ImageIcon("tree2.png");
-        water[0]=new ImageIcon("sea0.png");
-        water[1]=new ImageIcon("sea1.png");
-        water[2]=new ImageIcon("sea2.png");
-        land[0]=new ImageIcon("land0.png");
-        land[1]=new ImageIcon("land1.png");
-        land[2]=new ImageIcon("land2.png");
-        mountain[0]=new ImageIcon("mountain0.png");
-        mountain[1]=new ImageIcon("mountain1.png");
-        mountain[2]=new ImageIcon("mountain2.png");
-        fish[0]=new ImageIcon("fish0.png");
+        tree[0]=new ImageIcon(Path.panelImagePath + "tree0.png");
+        tree[1]=new ImageIcon(Path.panelImagePath + "tree1.png");
+        tree[2]=new ImageIcon(Path.panelImagePath + "tree2.png");
+        water[0]=new ImageIcon(Path.panelImagePath + "sea0.png");
+        water[1]=new ImageIcon(Path.panelImagePath + "sea1.png");
+        water[2]=new ImageIcon(Path.panelImagePath + "sea2.png");
+        land[0]=new ImageIcon(Path.panelImagePath + "land0.png");
+        land[1]=new ImageIcon(Path.panelImagePath + "land1.png");
+        land[2]=new ImageIcon(Path.panelImagePath + "land2.png");
+        mountain[0]=new ImageIcon(Path.panelImagePath + "mountain0.png");
+        mountain[1]=new ImageIcon(Path.panelImagePath + "mountain1.png");
+        mountain[2]=new ImageIcon(Path.panelImagePath + "mountain2.png");
+        fish[0]=new ImageIcon(Path.panelImagePath + "fish0.png");
         fish[1]=new ImageIcon("fish1.png");
         fish[2]=new ImageIcon("fish2.png");
         gold[0]=new ImageIcon("gold0.png");
