@@ -52,17 +52,17 @@ public class MyFrame extends JFrame implements ActionListener{
         mountain[1]=new ImageIcon(Path.panelImagePath + "mountain1.png");
         mountain[2]=new ImageIcon(Path.panelImagePath + "mountain2.png");
         fish[0]=new ImageIcon(Path.panelImagePath + "fish0.png");
-        fish[1]=new ImageIcon("fish1.png");
-        fish[2]=new ImageIcon("fish2.png");
-        gold[0]=new ImageIcon("gold0.png");
-        gold[1]=new ImageIcon("gold1.png");
-        gold[2]=new ImageIcon("gold2.png");
-        iron[0]=new ImageIcon("iron0.png");
-        iron[1]=new ImageIcon("iron1.png");
-        iron[2]=new ImageIcon("iron2.png");
-        agri[0]=new ImageIcon("agri0.png");
-        agri[1]=new ImageIcon("agri1.png");
-        agri[2]=new ImageIcon("agri2.png");
+        fish[1]=new ImageIcon(Path.panelImagePath + "fish1.png");
+        fish[2]=new ImageIcon(Path.panelImagePath + "fish2.png");
+        gold[0]=new ImageIcon(Path.panelImagePath + "gold0.png");
+        gold[1]=new ImageIcon(Path.panelImagePath + "gold1.png");
+        gold[2]=new ImageIcon(Path.panelImagePath + "gold2.png");
+        iron[0]=new ImageIcon(Path.panelImagePath + "iron0.png");
+        iron[1]=new ImageIcon(Path.panelImagePath + "iron1.png");
+        iron[2]=new ImageIcon(Path.panelImagePath + "iron2.png");
+        agri[0]=new ImageIcon(Path.panelImagePath + "agri0.png");
+        agri[1]=new ImageIcon(Path.panelImagePath + "agri1.png");
+        agri[2]=new ImageIcon(Path.panelImagePath + "agri2.png");
 
 
 
