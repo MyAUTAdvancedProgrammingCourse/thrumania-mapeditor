@@ -5,5 +5,6 @@ package com.poorgroupproject.thrumaniamapeditor;
  */
 public class Path {
     public static String panelImagePath = "resource/image/panel/";
+    public static String tileImagePath  = "resource/image/tile/";
 
 }

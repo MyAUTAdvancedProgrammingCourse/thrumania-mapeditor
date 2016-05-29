@@ -1,8 +1,11 @@
 package com.poorgroupproject.thrumaniamapeditor.form;
 
 
+import com.poorgroupproject.thrumaniamapeditor.Path;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -62,18 +65,14 @@ public class Main extends Frame {
 
     private enum PointerMode {
         WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
-    }
-
-    ;
+    };
 
     private PointerMode pointerMode = null;
 
 
     public enum Cell {
         WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
-    }
-
-    ;
+    };
 
     public Main() {
         super();
@@ -97,7 +96,11 @@ public class Main extends Frame {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                clickOnMap(mouseEvent.getX(), mouseEvent.getY());
+                MousePositionType mousePositionType = detectMousePosition(mouseEvent.getX(),mouseEvent.getY());
+                if (mousePositionType == MousePositionType.IN_MAP)
+                    clickOnMap(mouseEvent.getX(), mouseEvent.getY());
+                else if (mousePositionType == MousePositionType.IN_MINIMAP)
+                    clickOnMiniMap(mouseEvent.getX(),mouseEvent.getY());
             }
 
             @Override
@@ -123,8 +126,11 @@ public class Main extends Frame {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
-
-                clickOnMap(mouseEvent.getX(), mouseEvent.getY());
+                MousePositionType mousePositionType = detectMousePosition(mouseEvent.getX(),mouseEvent.getY());
+                if (mousePositionType == MousePositionType.IN_MAP)
+                    clickOnMap(mouseEvent.getX(), mouseEvent.getY());
+                else if (mousePositionType == MousePositionType.IN_MINIMAP)
+                    clickOnMiniMap(mouseEvent.getX(),mouseEvent.getY());
             }
 
             @Override
@@ -237,29 +243,33 @@ public class Main extends Frame {
                         break;
                     case KeyEvent.VK_F:
                         removeCol();
+                    break;
+
+                    case KeyEvent.VK_O:
+                        openMap();
                         break;
 
                     case KeyEvent.VK_0:
-                        pointerMode = PointerMode.LAND;
-                        break;
+                    pointerMode = PointerMode.LAND;
+                    break;
                     case KeyEvent.VK_1:
-                        pointerMode = PointerMode.MOUNTAIN;
-                        break;
+                    pointerMode = PointerMode.MOUNTAIN;
+                    break;
                     case KeyEvent.VK_2:
-                        pointerMode = PointerMode.WATER;
-                        break;
+                    pointerMode = PointerMode.WATER;
+                    break;
                     case KeyEvent.VK_3:
-                        pointerMode = PointerMode.TREE;
-                        break;
+                    pointerMode = PointerMode.TREE;
+                    break;
                     case KeyEvent.VK_4:
-                        pointerMode = PointerMode.FARM;
-                        break;
+                    pointerMode = PointerMode.FARM;
+                    break;
                     case KeyEvent.VK_5:
-                        pointerMode = PointerMode.GOLD_MINE;
-                        break;
+                    pointerMode = PointerMode.GOLD_MINE;
+                    break;
                     case KeyEvent.VK_6:
-                        pointerMode = PointerMode.IRON_MINE;
-                        break;
+                    pointerMode = PointerMode.IRON_MINE;
+                    break;
                 }
             }
 
@@ -283,13 +293,19 @@ public class Main extends Frame {
         });
     }
 
-    private final byte IN_MINIMAP = 1;
-    private final byte IN_MAP = 2;
-    private final byte IN_LEFT_PANEL = 3;
-    private final byte IN_BUTTOM_PANEL = 4;
+    private enum MousePositionType{
+        IN_MINIMAP,IN_MAP,IN_LEFT_PANEL,IN_BOTTOM_PANEL
+    };
 
-    private byte detectMousePosition(int x, int y) {
-        return 0;
+    private MousePositionType detectMousePosition(int x, int y) {
+        if ((x < miniMapX) && (y < miniMapY))
+            return MousePositionType.IN_MAP;
+        else if ((x > miniMapX) && (y < miniMapY))
+            return MousePositionType.IN_LEFT_PANEL;
+        else if ((x < miniMapX) && (y > miniMapY))
+            return MousePositionType.IN_BOTTOM_PANEL;
+        else
+            return MousePositionType.IN_MINIMAP;
     }
 
     private void clickOnMap(int x, int y) {
@@ -301,16 +317,53 @@ public class Main extends Frame {
         y /= zoomScale;
         int row = y / CELL_DEFAULT_HEIGHT;
         int col = x / CELL_DEFAULT_WIDTH;
-        if (pointerMode == PointerMode.LAND)
-            changeItem(col, row, Cell.LAND);
-        else if (pointerMode == PointerMode.WATER)
-            changeItem(col, row, Cell.WATER);
-        else if (pointerMode == PointerMode.TREE)
-            changeItem(col, row, Cell.TREE);
-        else if (pointerMode == PointerMode.MOUNTAIN)
-            changeItem(col, row, Cell.MOUNTAIN);
-        else if (pointerMode == PointerMode.GOLD_MINE)
-            changeItem(col, row, Cell.GOLD_MINE);
+        try {
+            if (pointerMode == PointerMode.LAND)
+                changeItem(col, row, Cell.LAND);
+            else if (pointerMode == PointerMode.WATER)
+                changeItem(col, row, Cell.WATER);
+            else if (pointerMode == PointerMode.TREE)
+                changeItem(col, row, Cell.TREE);
+            else if (pointerMode == PointerMode.MOUNTAIN)
+                changeItem(col, row, Cell.MOUNTAIN);
+            else if (pointerMode == PointerMode.GOLD_MINE)
+                changeItem(col, row, Cell.GOLD_MINE);
+        }catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("array out of bound");
+        }
+    }
+
+    private void openMap(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Thrumania Map File","tmf");
+        fileChooser.addChoosableFileFilter(fileFilter);
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        }
+
+    }
+
+    /**
+     * It assumes that the position of the mouse is in the mini map but the x and y parameter passes to the
+     * method is still the position of mouse with respect to the origin of the screen(upper left corner)
+     * @param x
+     * @param y
+     */
+    private void clickOnMiniMap(int x, int y){
+        x -= miniMapX;
+        y -= miniMapY;
+        mapViewportX = mapWidth * x / MINI_MAP_WIDTH;
+        mapViewportY = mapHeight * y / MINI_MAP_HEIGHT;
+        if (mapViewportX > mapWidth + mapViewPortWidth)
+            mapViewportX = mapWidth + mapViewPortWidth;
+        if (mapViewportY > mapHeight + mapViewPortHeight)
+            mapViewportY = mapHeight + mapViewPortHeight;
+        drawMiniMap();
+        repaint();
     }
 
     private void zoomIn() {
@@ -415,23 +468,23 @@ public class Main extends Frame {
     private void loadImages() {
         landImages = new Image[16];
         try {
-            waterImage = ImageIO.read(new File("resource/image/tile/water.png"));
-            landImages[0] = ImageIO.read(new File("resource/image/tile/no.png"));
-            landImages[1] = ImageIO.read(new File("resource/image/tile/od.png"));
-            landImages[2] = ImageIO.read(new File("resource/image/tile/or.png"));
-            landImages[3] = ImageIO.read(new File("resource/image/tile/sld.png"));
-            landImages[4] = ImageIO.read(new File("resource/image/tile/ou.png"));
-            landImages[5] = ImageIO.read(new File("resource/image/tile/ocntrud.png"));
-            landImages[6] = ImageIO.read(new File("resource/image/tile/slu.png"));
-            landImages[7] = ImageIO.read(new File("resource/image/tile/sl.png"));
-            landImages[8] = ImageIO.read(new File("resource/image/tile/ol.png"));
-            landImages[9] = ImageIO.read(new File("resource/image/tile/srd.png"));
-            landImages[10] = ImageIO.read(new File("resource/image/tile/ocntrlr.png"));
-            landImages[11] = ImageIO.read(new File("resource/image/tile/sd.png"));
-            landImages[12] = ImageIO.read(new File("resource/image/tile/sru.png"));
-            landImages[13] = ImageIO.read(new File("resource/image/tile/sr.png"));
-            landImages[14] = ImageIO.read(new File("resource/image/tile/su.png"));
-            landImages[15] = ImageIO.read(new File("resource/image/tile/cntr.png"));
+            waterImage = ImageIO.read(new File(Path.tileImagePath + "water.png"));
+            landImages[0] = ImageIO.read(new File(Path.tileImagePath + "no.png"));
+            landImages[1] = ImageIO.read(new File(Path.tileImagePath + "od.png"));
+            landImages[2] = ImageIO.read(new File(Path.tileImagePath + "or.png"));
+            landImages[3] = ImageIO.read(new File(Path.tileImagePath + "sld.png"));
+            landImages[4] = ImageIO.read(new File(Path.tileImagePath + "ou.png"));
+            landImages[5] = ImageIO.read(new File(Path.tileImagePath + "ocntrud.png"));
+            landImages[6] = ImageIO.read(new File(Path.tileImagePath + "slu.png"));
+            landImages[7] = ImageIO.read(new File(Path.tileImagePath + "sl.png"));
+            landImages[8] = ImageIO.read(new File(Path.tileImagePath + "ol.png"));
+            landImages[9] = ImageIO.read(new File(Path.tileImagePath + "srd.png"));
+            landImages[10] = ImageIO.read(new File(Path.tileImagePath + "ocntrlr.png"));
+            landImages[11] = ImageIO.read(new File(Path.tileImagePath + "sd.png"));
+            landImages[12] = ImageIO.read(new File(Path.tileImagePath + "sru.png"));
+            landImages[13] = ImageIO.read(new File(Path.tileImagePath + "sr.png"));
+            landImages[14] = ImageIO.read(new File(Path.tileImagePath + "su.png"));
+            landImages[15] = ImageIO.read(new File(Path.tileImagePath + "cntr.png"));
 
             treeImage = ImageIO.read(new File("resource/image/item/spring.png"));
 
@@ -508,11 +561,14 @@ public class Main extends Frame {
     private void changeItem(int col, int row, Cell content) {
         Graphics graphics = map.createGraphics();
         Graphics graphics1 = miniMap.createGraphics();
+
         Image image = null;
         if (content == Cell.WATER) {
             image = waterImage;
+            mapMatrix[row][col] = content;
         } else if (content == Cell.LAND) {
             image = getLandImage(row, col);
+            mapMatrix[row][col] = content;
         } else if (content == Cell.TREE) {
             if (mapMatrix[row][col] == Cell.LAND) {
                 image = treeImage;
@@ -520,10 +576,10 @@ public class Main extends Frame {
                 graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
                 repaint();
             }
+            mapMatrix[row][col] = content;
             return;
         }
 
-        mapMatrix[row][col] = content;
 
         // To drawing the image of the neighbour cells
         if ((col != 0) && (mapMatrix[row][col - 1] == Cell.LAND)) {
@@ -532,24 +588,68 @@ public class Main extends Frame {
             graphics1.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
+        if ((col != 0) && (mapMatrix[row][col - 1] == Cell.TREE)) {
+            graphics.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(treeImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(treeImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+
         if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.LAND)) {
             graphics.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
             graphics1.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
+        if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.TREE)) {
+            graphics.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(treeImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(treeImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+
         if ((row != 0) && (mapMatrix[row - 1][col] == Cell.LAND)) {
             graphics.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
             graphics1.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
+        if ((row != 0) && (mapMatrix[row - 1][col] == Cell.TREE)) {
+            graphics.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(treeImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(treeImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+
         if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.LAND)) {
             graphics.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
             graphics1.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
+        if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.TREE)) {
+            graphics.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(treeImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(treeImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+
 
         graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
@@ -604,9 +704,7 @@ class Action {
 
     private enum ActionType {
         ADD_ROW, RM_ROW, ADD_COL, RM_COL, CHG_MAP
-    }
-
-    ;
+    };
 
     ActionType actionType;
     Main.Cell[][] matrix;
