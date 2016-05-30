@@ -6,11 +6,15 @@ import com.poorgroupproject.thrumaniamapeditor.Path;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 import java.util.Stack;
 
 /**
@@ -51,8 +55,10 @@ public class Main extends Frame {
 
     private Cell[][] mapMatrix;
     private BufferedImage miniMap;
+    private BufferedImage tempMiniMap;
 
     private BufferedImage map;
+    private BufferedImage tempMap;
 
     private Image waterImage;
     private Image[] landImages;
@@ -60,19 +66,25 @@ public class Main extends Frame {
 
     private boolean isViewPortMoving;
 
+    private Point cursorLastLocation;
+
     private Stack<Action> undo;
     private Stack<Action> redo;
 
     private enum PointerMode {
-        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
-    };
+        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE, MAP_MOVING
+    }
+
+    ;
 
     private PointerMode pointerMode = null;
 
 
     public enum Cell {
         WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
-    };
+    }
+
+    ;
 
     public Main() {
         super();
@@ -96,16 +108,16 @@ public class Main extends Frame {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                MousePositionType mousePositionType = detectMousePosition(mouseEvent.getX(),mouseEvent.getY());
+                MousePositionType mousePositionType = detectMousePosition(mouseEvent.getX(), mouseEvent.getY());
                 if (mousePositionType == MousePositionType.IN_MAP)
                     clickOnMap(mouseEvent.getX(), mouseEvent.getY());
                 else if (mousePositionType == MousePositionType.IN_MINIMAP)
-                    clickOnMiniMap(mouseEvent.getX(),mouseEvent.getY());
+                    clickOnMiniMap(mouseEvent.getX(), mouseEvent.getY());
             }
 
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-
+                cursorLastLocation = new Point(mouseEvent.getPoint());
             }
 
             @Override
@@ -126,11 +138,11 @@ public class Main extends Frame {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent mouseEvent) {
-                MousePositionType mousePositionType = detectMousePosition(mouseEvent.getX(),mouseEvent.getY());
+                MousePositionType mousePositionType = detectMousePosition(mouseEvent.getX(), mouseEvent.getY());
                 if (mousePositionType == MousePositionType.IN_MAP)
                     clickOnMap(mouseEvent.getX(), mouseEvent.getY());
                 else if (mousePositionType == MousePositionType.IN_MINIMAP)
-                    clickOnMiniMap(mouseEvent.getX(),mouseEvent.getY());
+                    clickOnMiniMap(mouseEvent.getX(), mouseEvent.getY());
             }
 
             @Override
@@ -232,44 +244,50 @@ public class Main extends Frame {
                     case KeyEvent.VK_ESCAPE:
                         System.exit(0);
                         break;
-                    case KeyEvent.VK_A:
+                    case KeyEvent.VK_Z:
                         addRow();
                         break;
-                    case KeyEvent.VK_S:
+                    case KeyEvent.VK_X:
                         addCol();
                         break;
-                    case KeyEvent.VK_D:
+                    case KeyEvent.VK_C:
                         removeRow();
                         break;
-                    case KeyEvent.VK_F:
+                    case KeyEvent.VK_V:
                         removeCol();
-                    break;
+                        break;
 
+                    case KeyEvent.VK_S:
+                        saveMap();
+                        break;
                     case KeyEvent.VK_O:
                         openMap();
                         break;
 
                     case KeyEvent.VK_0:
-                    pointerMode = PointerMode.LAND;
-                    break;
+                        pointerMode = PointerMode.LAND;
+                        break;
                     case KeyEvent.VK_1:
-                    pointerMode = PointerMode.MOUNTAIN;
-                    break;
+                        pointerMode = PointerMode.MOUNTAIN;
+                        break;
                     case KeyEvent.VK_2:
-                    pointerMode = PointerMode.WATER;
-                    break;
+                        pointerMode = PointerMode.WATER;
+                        break;
                     case KeyEvent.VK_3:
-                    pointerMode = PointerMode.TREE;
-                    break;
+                        pointerMode = PointerMode.TREE;
+                        break;
                     case KeyEvent.VK_4:
-                    pointerMode = PointerMode.FARM;
-                    break;
+                        pointerMode = PointerMode.FARM;
+                        break;
                     case KeyEvent.VK_5:
-                    pointerMode = PointerMode.GOLD_MINE;
-                    break;
+                        pointerMode = PointerMode.GOLD_MINE;
+                        break;
                     case KeyEvent.VK_6:
-                    pointerMode = PointerMode.IRON_MINE;
-                    break;
+                        pointerMode = PointerMode.IRON_MINE;
+                        break;
+                    case KeyEvent.VK_EQUALS:
+                        pointerMode = PointerMode.MAP_MOVING;
+                        break;
                 }
             }
 
@@ -293,9 +311,11 @@ public class Main extends Frame {
         });
     }
 
-    private enum MousePositionType{
-        IN_MINIMAP,IN_MAP,IN_LEFT_PANEL,IN_BOTTOM_PANEL
-    };
+    private enum MousePositionType {
+        IN_MINIMAP, IN_MAP, IN_LEFT_PANEL, IN_BOTTOM_PANEL
+    }
+
+    ;
 
     private MousePositionType detectMousePosition(int x, int y) {
         if ((x < miniMapX) && (y < miniMapY))
@@ -328,16 +348,59 @@ public class Main extends Frame {
                 changeItem(col, row, Cell.MOUNTAIN);
             else if (pointerMode == PointerMode.GOLD_MINE)
                 changeItem(col, row, Cell.GOLD_MINE);
-        }catch (ArrayIndexOutOfBoundsException e){
+            else if (pointerMode == PointerMode.MAP_MOVING){
+                mapViewportX -= x - cursorLastLocation.getX();
+                mapViewportY -= y - cursorLastLocation.getY();
+                cursorLastLocation.setLocation(x,y);
+                drawMiniMap();
+                repaint();
+                System.out.println("some loooooooooooooooooooooooooo" + (x - cursorLastLocation.getX()));
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("array out of bound");
         }
     }
 
-    private void openMap(){
+    private void saveMap() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         fileChooser.setAcceptAllFileFilterUsed(false);
-        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Thrumania Map File","tmf");
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Thrumania Map File", "tmf");
+        fileChooser.addChoosableFileFilter(fileFilter);
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            String selectedFilePath = fileChooser.getSelectedFile().toString();
+            if (!selectedFilePath.endsWith(".tmf")){
+                selectedFilePath += ".tmf";
+            }
+            PrintWriter fileSaver = null;
+            try {
+                fileSaver = new PrintWriter(selectedFilePath);
+            } catch (FileNotFoundException e) {
+                System.err.println("file not found");
+                return;
+            }
+
+            fileSaver.print(rows + " " + cols);
+
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    if (mapMatrix[i][j] == Cell.LAND){
+
+                    }
+                }
+            }
+
+            
+            fileSaver.close();
+        }
+    }
+
+    private void openMap() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Thrumania Map File", "tmf");
         fileChooser.addChoosableFileFilter(fileFilter);
         int result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -350,10 +413,11 @@ public class Main extends Frame {
     /**
      * It assumes that the position of the mouse is in the mini map but the x and y parameter passes to the
      * method is still the position of mouse with respect to the origin of the screen(upper left corner)
+     *
      * @param x
      * @param y
      */
-    private void clickOnMiniMap(int x, int y){
+    private void clickOnMiniMap(int x, int y) {
         x -= miniMapX;
         y -= miniMapY;
         mapViewportX = mapWidth * x / MINI_MAP_WIDTH;
@@ -404,7 +468,7 @@ public class Main extends Frame {
     }
 
     private void removeRow() {
-        if (rows < MAP_MAX_ROW) {
+        if (rows > MAP_MIN_ROW) {
             rows--;
             setMapDimension();
         }
@@ -427,7 +491,7 @@ public class Main extends Frame {
     }
 
     private void moveViewportUp() {
-        if (mapViewportY > 0) {
+        if (mapViewportY > 12) {
             mapViewportY -= 10;
             drawMiniMap();
             repaint();
@@ -504,29 +568,63 @@ public class Main extends Frame {
     private void setMapDimension() {
         mapWidth = cols * CELL_DEFAULT_WIDTH;
         mapHeight = rows * CELL_DEFAULT_HEIGHT;
+
         Cell[][] mapMatrixTemp = new Cell[rows][cols];
+        tempMap = new BufferedImage(mapWidth,mapHeight,BufferedImage.TYPE_INT_RGB);
+        tempMiniMap = new BufferedImage(mapWidth,mapHeight,BufferedImage.TYPE_INT_RGB);
+
+        Graphics tempMapGraphics = tempMap.createGraphics();
+        Graphics tempMiniMapGraphics = tempMiniMap.createGraphics();
+
         int lastRows = mapMatrix.length;
         int lastCols = mapMatrix[0].length;
+
         if (lastCols > cols) {
-            for (int i = 0; i < lastRows; i++) {
+            for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    //mapMatrixTemp  mapMatrix[i][j]
+                    mapMatrixTemp[i][j] = mapMatrix[i][j];
                 }
             }
+            tempMapGraphics.drawImage(map.getSubimage(0,0,cols * CELL_DEFAULT_WIDTH, rows * CELL_DEFAULT_HEIGHT),0,0,null);
+            tempMiniMapGraphics.drawImage(miniMap.getSubimage(0,0,cols * CELL_DEFAULT_WIDTH, rows * CELL_DEFAULT_HEIGHT),0,0,null);
         }
-        if (lastRows > rows) {
-            for (int i = 0; i < lastRows; i++) {
+        else if (lastRows > rows) {
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    mapMatrixTemp[i][j] = mapMatrix[i][j];
+                }
+            }
+            tempMapGraphics.drawImage(map.getSubimage(0,0,lastCols * CELL_DEFAULT_WIDTH, lastRows * CELL_DEFAULT_HEIGHT),0,0,null);
+            tempMiniMapGraphics.drawImage(miniMap.getSubimage(0,0,cols * CELL_DEFAULT_WIDTH, rows * CELL_DEFAULT_HEIGHT),0,0,null);
+        }
+        else if (lastCols < cols) {
+            for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < lastCols; j++) {
-
+                    mapMatrixTemp[i][j] = mapMatrix[i][j];
                 }
+                tempMapGraphics.drawImage(waterImage,(cols - 1) * CELL_DEFAULT_WIDTH, i * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                tempMiniMapGraphics.drawImage(waterImage,(cols - 1) * CELL_DEFAULT_WIDTH, i * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                mapMatrixTemp[i][cols - 1] = Cell.WATER;
             }
+            tempMapGraphics.drawImage(map.getSubimage(0,0,lastCols * CELL_DEFAULT_WIDTH, lastRows * CELL_DEFAULT_HEIGHT),0,0,null);
+            tempMiniMapGraphics.drawImage(miniMap.getSubimage(0,0,lastCols * CELL_DEFAULT_WIDTH, lastRows * CELL_DEFAULT_HEIGHT),0,0,null);
         }
-        if (lastCols < cols) {
+        else if (lastRows < rows) {
+            for (int i = 0; i < cols; i++) {
+                for (int j = 0; j < lastRows; j++) {
+                    mapMatrixTemp[j][i] = mapMatrix[j][i];
+                }
+                tempMapGraphics.drawImage(waterImage,i * CELL_DEFAULT_WIDTH, (rows - 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                tempMiniMapGraphics.drawImage(waterImage,i * CELL_DEFAULT_WIDTH, (rows - 1) * CELL_DEFAULT_HEIGHT,CELL_DEFAULT_WIDTH,CELL_DEFAULT_HEIGHT,null);
+                mapMatrixTemp[rows - 1][i] = Cell.WATER;
+            }
+            tempMapGraphics.drawImage(map.getSubimage(0,0,lastCols * CELL_DEFAULT_WIDTH, lastRows * CELL_DEFAULT_HEIGHT),0,0,null);
+            tempMiniMapGraphics.drawImage(miniMap.getSubimage(0,0,lastCols * CELL_DEFAULT_WIDTH, lastRows * CELL_DEFAULT_HEIGHT),0,0,null);
+        }
 
-        }
-        if (lastRows < rows) {
-
-        }
+        map = tempMap;
+        miniMap = tempMiniMap;
+        repaint();
     }
 
     private void initMap() {
@@ -690,7 +788,10 @@ public class Main extends Frame {
         int height = ((int) (mapHeight * zoomScale));
         int x = -1 * mapViewportX;
         int y = -1 * mapViewportY;
-        graphics.drawImage(map, x, y, width, height, null);
+//        graphics.drawImage(map, x, y, width, height, null);
+        System.out.println("mapViewportX = " + mapViewportX);
+        System.out.println("mapViewportY = " + mapViewportY);
+        graphics.drawImage(map.getSubimage(mapViewportX,mapViewportY,mapViewPortWidth,mapViewPortHeight), 0, 0, mapViewPortWidth,mapViewPortHeight, null);
         graphics.drawImage(miniMap,
                 mapViewPortWidth,
                 mapViewPortHeight,
@@ -704,7 +805,9 @@ class Action {
 
     private enum ActionType {
         ADD_ROW, RM_ROW, ADD_COL, RM_COL, CHG_MAP
-    };
+    }
+
+    ;
 
     ActionType actionType;
     Main.Cell[][] matrix;
