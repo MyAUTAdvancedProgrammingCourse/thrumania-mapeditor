@@ -2,6 +2,7 @@ package com.poorgroupproject.thrumaniamapeditor.form;
 
 
 import com.poorgroupproject.thrumaniamapeditor.Path;
+import com.poorgroupproject.thrumaniamapeditor.form.element.ItemPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -73,18 +74,14 @@ public class Main extends Frame {
 
     private enum PointerMode {
         WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE, MAP_MOVING
-    }
-
-    ;
+    };
 
     private PointerMode pointerMode = null;
 
 
     public enum Cell {
         WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
-    }
-
-    ;
+    };
 
     public Main() {
         super();
@@ -147,78 +144,81 @@ public class Main extends Frame {
 
             @Override
             public void mouseMoved(MouseEvent mouseEvent) {
-                Runnable r = null;
-                if (mouseEvent.getY() < BORDER_LEN_MOVE_VIEWPORT) {
-                    r = new Runnable() {
-                        @Override
-                        public void run() {
-                            isViewPortMoving = false;
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            isViewPortMoving = true;
-                            while (isViewPortMoving) {
-                                moveViewportUp();
-                            }
-                        }
-                    };
-                } else if ((mouseEvent.getY() > mapViewPortHeight - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getY() < mapViewPortHeight)) {
-                    r = new Runnable() {
-                        @Override
-                        public void run() {
-                            isViewPortMoving = false;
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            isViewPortMoving = true;
-                            while (isViewPortMoving) {
-                                moveViewportDown();
-                            }
-                        }
-                    };
-                } else if (mouseEvent.getX() < BORDER_LEN_MOVE_VIEWPORT) {
-                    r = new Runnable() {
-                        @Override
-                        public void run() {
-                            isViewPortMoving = false;
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            isViewPortMoving = true;
-                            while (isViewPortMoving) {
-                                moveViewportLeft();
-                            }
-                        }
-                    };
-                } else if ((mouseEvent.getX() > mapViewPortWidth - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getX() < mapViewPortWidth)) {
-                    r = new Runnable() {
-                        @Override
-                        public void run() {
-                            isViewPortMoving = false;
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            isViewPortMoving = true;
-                            while (isViewPortMoving) {
-                                moveViewportRight();
-                            }
-                        }
-                    };
-                } else {
-                    isViewPortMoving = false;
-                }
-                if (r != null) {
-                    (new Thread(r)).start();
-                }
             }
+//            @Override
+//            public void mouseMoved(MouseEvent mouseEvent) {
+//                Runnable r = null;
+//                if (mouseEvent.getY() < BORDER_LEN_MOVE_VIEWPORT) {
+//                    r = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            isViewPortMoving = false;
+//                            try {
+//                                Thread.sleep(20);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            isViewPortMoving = true;
+//                            while (isViewPortMoving) {
+//                                moveViewportUp();
+//                            }
+//                        }
+//                    };
+//                } else if ((mouseEvent.getY() > mapViewPortHeight - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getY() < mapViewPortHeight)) {
+//                    r = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            isViewPortMoving = false;
+//                            try {
+//                                Thread.sleep(20);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            isViewPortMoving = true;
+//                            while (isViewPortMoving) {
+//                                moveViewportDown();
+//                            }
+//                        }
+//                    };
+//                } else if (mouseEvent.getX() < BORDER_LEN_MOVE_VIEWPORT) {
+//                    r = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            isViewPortMoving = false;
+//                            try {
+//                                Thread.sleep(20);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            isViewPortMoving = true;
+//                            while (isViewPortMoving) {
+//                                moveViewportLeft();
+//                            }
+//                        }
+//                    };
+//                } else if ((mouseEvent.getX() > mapViewPortWidth - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getX() < mapViewPortWidth)) {
+//                    r = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            isViewPortMoving = false;
+//                            try {
+//                                Thread.sleep(20);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                            isViewPortMoving = true;
+//                            while (isViewPortMoving) {
+//                                moveViewportRight();
+//                            }
+//                        }
+//                    };
+//                } else {
+//                    isViewPortMoving = false;
+//                }
+//                if (r != null) {
+//                    (new Thread(r)).start();
+//                }
+//            }
         });
         addKeyListener(new KeyListener() {
             @Override
@@ -227,68 +227,8 @@ public class Main extends Frame {
             }
 
             @Override
-            public void keyPressed(KeyEvent keyEvent) {
-                switch (keyEvent.getKeyCode()) {
-                    case KeyEvent.VK_LEFT:
-                        moveViewportLeft();
-                        break;
-                    case KeyEvent.VK_UP:
-                        moveViewportUp();
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        moveViewportRight();
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        moveViewportDown();
-                        break;
-                    case KeyEvent.VK_ESCAPE:
-                        System.exit(0);
-                        break;
-                    case KeyEvent.VK_Z:
-                        addRow();
-                        break;
-                    case KeyEvent.VK_X:
-                        addCol();
-                        break;
-                    case KeyEvent.VK_C:
-                        removeRow();
-                        break;
-                    case KeyEvent.VK_V:
-                        removeCol();
-                        break;
-
-                    case KeyEvent.VK_S:
-                        saveMap();
-                        break;
-                    case KeyEvent.VK_O:
-                        openMap();
-                        break;
-
-                    case KeyEvent.VK_0:
-                        pointerMode = PointerMode.LAND;
-                        break;
-                    case KeyEvent.VK_1:
-                        pointerMode = PointerMode.MOUNTAIN;
-                        break;
-                    case KeyEvent.VK_2:
-                        pointerMode = PointerMode.WATER;
-                        break;
-                    case KeyEvent.VK_3:
-                        pointerMode = PointerMode.TREE;
-                        break;
-                    case KeyEvent.VK_4:
-                        pointerMode = PointerMode.FARM;
-                        break;
-                    case KeyEvent.VK_5:
-                        pointerMode = PointerMode.GOLD_MINE;
-                        break;
-                    case KeyEvent.VK_6:
-                        pointerMode = PointerMode.IRON_MINE;
-                        break;
-                    case KeyEvent.VK_EQUALS:
-                        pointerMode = PointerMode.MAP_MOVING;
-                        break;
-                }
+            public void keyPressed(KeyEvent keyEvent){
+                handleKeyboardInput(keyEvent);
             }
 
             @Override
@@ -309,6 +249,9 @@ public class Main extends Frame {
                 }
             }
         });
+
+        Canvas c = new ItemPanel(this,new Point(miniMapX,0),new Dimension(MINI_MAP_WIDTH,mapViewPortHeight));
+        add(c);
     }
 
     private enum MousePositionType {
@@ -316,6 +259,70 @@ public class Main extends Frame {
     }
 
     ;
+
+    public void handleKeyboardInput(KeyEvent keyEvent) {
+        switch (keyEvent.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                moveViewportLeft();
+                break;
+            case KeyEvent.VK_UP:
+                moveViewportUp();
+                break;
+            case KeyEvent.VK_RIGHT:
+                moveViewportRight();
+                break;
+            case KeyEvent.VK_DOWN:
+                moveViewportDown();
+                break;
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);
+                break;
+            case KeyEvent.VK_Z:
+                addRow();
+                break;
+            case KeyEvent.VK_X:
+                addCol();
+                break;
+            case KeyEvent.VK_C:
+                removeRow();
+                break;
+            case KeyEvent.VK_V:
+                removeCol();
+                break;
+
+            case KeyEvent.VK_S:
+                saveMap();
+                break;
+            case KeyEvent.VK_O:
+                openMap();
+                break;
+
+            case KeyEvent.VK_0:
+                pointerMode = PointerMode.LAND;
+                break;
+            case KeyEvent.VK_1:
+                pointerMode = PointerMode.MOUNTAIN;
+                break;
+            case KeyEvent.VK_2:
+                pointerMode = PointerMode.WATER;
+                break;
+            case KeyEvent.VK_3:
+                pointerMode = PointerMode.TREE;
+                break;
+            case KeyEvent.VK_4:
+                pointerMode = PointerMode.FARM;
+                break;
+            case KeyEvent.VK_5:
+                pointerMode = PointerMode.GOLD_MINE;
+                break;
+            case KeyEvent.VK_6:
+                pointerMode = PointerMode.IRON_MINE;
+                break;
+            case KeyEvent.VK_EQUALS:
+                pointerMode = PointerMode.MAP_MOVING;
+                break;
+        }
+    }
 
     private MousePositionType detectMousePosition(int x, int y) {
         if ((x < miniMapX) && (y < miniMapY))
