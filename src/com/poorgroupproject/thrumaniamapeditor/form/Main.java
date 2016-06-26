@@ -73,14 +73,14 @@ public class Main extends Frame {
     private Stack<Action> redo;
 
     private enum PointerMode {
-        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE, MAP_MOVING
+        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE, MAP_MOVING,FISH
     };
 
     private PointerMode pointerMode = null;
 
 
     public enum Cell {
-        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,
+        WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE,FISH
     };
 
     public Main() {
