@@ -102,6 +102,32 @@ public class ItemPanel extends Canvas {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 main.handleKeyboardInput(keyEvent);
+                switch (keyEvent.getKeyCode()){
+                    case KeyEvent.VK_0:
+                        selectItem(4);
+                        break;
+                    case KeyEvent.VK_1:
+                        selectItem(5);
+                        break;
+                    case KeyEvent.VK_2:
+                        selectItem(6);
+                        break;
+                    case KeyEvent.VK_3:
+                        selectItem(7);
+                        break;
+                    case KeyEvent.VK_4:
+                        selectItem(0);
+                        break;
+                    case KeyEvent.VK_5:
+                        selectItem(2);
+                        break;
+                    case KeyEvent.VK_6:
+                        selectItem(3);
+                        break;
+                    case KeyEvent.VK_EQUALS:
+                        selectItem(1);
+                        break;
+                }
             }
 
             @Override
@@ -113,8 +139,8 @@ public class ItemPanel extends Canvas {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 makeItemDefault();
-                itemStatus[(int)(mouseEvent.getY() / itemDimension.getHeight())] = 2;
-                setItemImages();
+                int index = (int)(mouseEvent.getY() / itemDimension.getHeight());
+                selectItem(index);
             }
 
             @Override
@@ -153,6 +179,19 @@ public class ItemPanel extends Canvas {
                 setItemImages();
             }
         });
+    }
+
+    private void selectItem(int index){
+        if (selectedId == index){       //      User wants to deselect the selected item
+            selectedId = -1;
+            itemStatus[index] = 0;
+        }else {
+            if (selectedId != -1)
+                itemStatus[selectedId] = 0;
+            selectedId = index;
+            itemStatus[index] = 2;
+        }
+        setItemImages();
     }
 
     private void makeItemDefault(){
