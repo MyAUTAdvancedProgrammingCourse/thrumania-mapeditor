@@ -3,6 +3,7 @@ package com.poorgroupproject.thrumaniamapeditor.form;
 
 import com.poorgroupproject.thrumaniamapeditor.Path;
 import com.poorgroupproject.thrumaniamapeditor.form.element.ItemPanel;
+import com.poorgroupproject.thrumaniamapeditor.form.element.NaviPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 /**
  * @author ahmad
@@ -64,6 +66,12 @@ public class Main extends Frame {
     private Image waterImage;
     private Image[] landImages;
     private Image treeImage;
+    private Image mountImage;
+    private Image farmImage;
+    private Image fishImage;
+    private Image goldMineImage;
+    private Image ironMineImage;
+
 
     private boolean isViewPortMoving;
 
@@ -72,11 +80,11 @@ public class Main extends Frame {
     private Stack<Action> undo;
     private Stack<Action> redo;
 
-    private enum PointerMode {
+    public enum PointerMode {
         WATER, LAND, MOUNTAIN, TREE, FARM, GOLD_MINE, IRON_MINE, MAP_MOVING,FISH
     };
 
-    private PointerMode pointerMode = null;
+    public PointerMode pointerMode = null;
 
 
     public enum Cell {
@@ -144,81 +152,78 @@ public class Main extends Frame {
 
             @Override
             public void mouseMoved(MouseEvent mouseEvent) {
+                Runnable r = null;
+                if (mouseEvent.getY() < BORDER_LEN_MOVE_VIEWPORT) {
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving) {
+                                moveViewportUp();
+                            }
+                        }
+                    };
+                } else if ((mouseEvent.getY() > mapViewPortHeight - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getY() < mapViewPortHeight)) {
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving) {
+                                moveViewportDown();
+                            }
+                        }
+                    };
+                } else if (mouseEvent.getX() < BORDER_LEN_MOVE_VIEWPORT) {
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving) {
+                                moveViewportLeft();
+                            }
+                        }
+                    };
+                } else if ((mouseEvent.getX() > mapViewPortWidth - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getX() < mapViewPortWidth)) {
+                    r = new Runnable() {
+                        @Override
+                        public void run() {
+                            isViewPortMoving = false;
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            isViewPortMoving = true;
+                            while (isViewPortMoving) {
+                                moveViewportRight();
+                            }
+                        }
+                    };
+                } else {
+                    isViewPortMoving = false;
+                }
+                if (r != null) {
+                    (new Thread(r)).start();
+                }
             }
-//            @Override
-//            public void mouseMoved(MouseEvent mouseEvent) {
-//                Runnable r = null;
-//                if (mouseEvent.getY() < BORDER_LEN_MOVE_VIEWPORT) {
-//                    r = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            isViewPortMoving = false;
-//                            try {
-//                                Thread.sleep(20);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                            isViewPortMoving = true;
-//                            while (isViewPortMoving) {
-//                                moveViewportUp();
-//                            }
-//                        }
-//                    };
-//                } else if ((mouseEvent.getY() > mapViewPortHeight - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getY() < mapViewPortHeight)) {
-//                    r = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            isViewPortMoving = false;
-//                            try {
-//                                Thread.sleep(20);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                            isViewPortMoving = true;
-//                            while (isViewPortMoving) {
-//                                moveViewportDown();
-//                            }
-//                        }
-//                    };
-//                } else if (mouseEvent.getX() < BORDER_LEN_MOVE_VIEWPORT) {
-//                    r = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            isViewPortMoving = false;
-//                            try {
-//                                Thread.sleep(20);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                            isViewPortMoving = true;
-//                            while (isViewPortMoving) {
-//                                moveViewportLeft();
-//                            }
-//                        }
-//                    };
-//                } else if ((mouseEvent.getX() > mapViewPortWidth - BORDER_LEN_MOVE_VIEWPORT) && (mouseEvent.getX() < mapViewPortWidth)) {
-//                    r = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            isViewPortMoving = false;
-//                            try {
-//                                Thread.sleep(20);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                            isViewPortMoving = true;
-//                            while (isViewPortMoving) {
-//                                moveViewportRight();
-//                            }
-//                        }
-//                    };
-//                } else {
-//                    isViewPortMoving = false;
-//                }
-//                if (r != null) {
-//                    (new Thread(r)).start();
-//                }
-//            }
         });
         addKeyListener(new KeyListener() {
             @Override
@@ -252,6 +257,11 @@ public class Main extends Frame {
 
         Canvas c = new ItemPanel(this,new Point(miniMapX,0),new Dimension(MINI_MAP_WIDTH,mapViewPortHeight));
         add(c);
+        add(new NaviPanel(0,miniMapY,mapViewPortWidth,MINI_MAP_HEIGHT, this));
+    }
+
+    public void setIsViewPortMoving(boolean value){
+        isViewPortMoving = value;
     }
 
     private enum MousePositionType {
@@ -259,6 +269,14 @@ public class Main extends Frame {
     }
 
     ;
+
+    public void undo(){
+
+    }
+
+    public void redo(){
+
+    }
 
     public void handleKeyboardInput(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()) {
@@ -355,6 +373,12 @@ public class Main extends Frame {
                 changeItem(col, row, Cell.MOUNTAIN);
             else if (pointerMode == PointerMode.GOLD_MINE)
                 changeItem(col, row, Cell.GOLD_MINE);
+            else if (pointerMode == PointerMode.FARM)
+                changeItem(col, row, Cell.FARM);
+            else if (pointerMode == PointerMode.FISH)
+                changeItem(col, row, Cell.FISH);
+            else if (pointerMode == PointerMode.IRON_MINE)
+                changeItem(col,row,Cell.IRON_MINE);
             else if (pointerMode == PointerMode.MAP_MOVING){
                 mapViewportX -= x - cursorLastLocation.getX();
                 mapViewportY -= y - cursorLastLocation.getY();
@@ -368,7 +392,7 @@ public class Main extends Frame {
         }
     }
 
-    private void saveMap() {
+    public void saveMap() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -387,15 +411,13 @@ public class Main extends Frame {
                 System.err.println("file not found");
                 return;
             }
-
-            fileSaver.print(rows + " " + cols);
-
+            fileSaver.println(rows);
+            fileSaver.println(cols);
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    if (mapMatrix[i][j] == Cell.LAND){
-
-                    }
+                    fileSaver.print(mapMatrix[i][j] + " ");
                 }
+                fileSaver.println();
             }
 
             
@@ -403,7 +425,7 @@ public class Main extends Frame {
         }
     }
 
-    private void openMap() {
+    public void openMap() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -412,7 +434,48 @@ public class Main extends Frame {
         int result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            Scanner s = null;
+            try {
+                s = new Scanner(selectedFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            rows = s.nextInt();
+            cols = s.nextInt();
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    switch (s.next()){
+                        case "LAND":
+                            mapMatrix[i][j] = Cell.LAND;
+                            break;
+                        case "MOUNTAIN":
+                            mapMatrix[i][j] = Cell.MOUNTAIN;
+                            break;
+                        case "FARM":
+                            mapMatrix[i][j] = Cell.FARM;
+                            break;
+                        case "TREE":
+                            mapMatrix[i][j] = Cell.TREE;
+                            break;
+                        case "FISH":
+                            mapMatrix[i][j] = Cell.FISH;
+                            break;
+                        case "WATER":
+                            mapMatrix[i][j] = Cell.WATER;
+                            break;
+                        case "GOLD_MINE":
+                            mapMatrix[i][j] = Cell.GOLD_MINE;
+                            break;
+                        case "IRON_MINE":
+                            mapMatrix[i][j] = Cell.IRON_MINE;
+                            break;
+                    }
+                }
+            }
+            makeMap();
+            drawMiniMap();
+            repaint();
+
         }
 
     }
@@ -437,7 +500,7 @@ public class Main extends Frame {
         repaint();
     }
 
-    private void zoomIn() {
+    public void zoomIn() {
         if (zoomScale < 3) {
             zoomScale += 0.25;
             repaint();
@@ -445,7 +508,7 @@ public class Main extends Frame {
         drawMiniMap();
     }
 
-    private void zoomOut() {
+    public void zoomOut() {
         if (zoomScale > 0.1) {
             zoomScale -= 0.25;
             repaint();
@@ -453,60 +516,60 @@ public class Main extends Frame {
         drawMiniMap();
     }
 
-    private void addCol() {
+    public void addCol() {
         if (cols < MAP_MAX_COL) {
             cols++;
             setMapDimension();
         }
     }
 
-    private void addRow() {
+    public void addRow() {
         if (rows < MAP_MAX_ROW) {
             rows++;
             setMapDimension();
         }
     }
 
-    private void removeCol() {
+    public void removeCol() {
         if (cols > MAP_MIN_COL) {
             cols--;
             setMapDimension();
         }
     }
 
-    private void removeRow() {
+    public void removeRow() {
         if (rows > MAP_MIN_ROW) {
             rows--;
             setMapDimension();
         }
     }
 
-    private void moveViewportLeft() {
-        if (mapViewportX > 0) {
+    public void moveViewportLeft() {
+        if (mapViewportX > 10) {
             mapViewportX -= 10;
             drawMiniMap();
             repaint();
         }
     }
 
-    private void moveViewportRight() {
-        if (mapViewportX + mapViewPortWidth < mapHeight) {
+    public void moveViewportRight() {
+        if (mapViewportX + mapViewPortWidth < mapHeight - 10) {
             mapViewportX += 10;
             drawMiniMap();
             repaint();
         }
     }
 
-    private void moveViewportUp() {
-        if (mapViewportY > 12) {
+    public void moveViewportUp() {
+        if (mapViewportY > 10) {
             mapViewportY -= 10;
             drawMiniMap();
             repaint();
         }
     }
 
-    private void moveViewportDown() {
-        if (mapViewportY + mapViewPortHeight < mapWidth) {
+    public void moveViewportDown() {
+        if (mapViewportY + mapViewPortHeight < mapWidth - 10) {
             mapViewportY += 10;
             drawMiniMap();
             repaint();
@@ -521,16 +584,16 @@ public class Main extends Frame {
          */
         int counter = 0;
 
-        if ((row != 0) && (mapMatrix[row - 1][col] == Cell.LAND || mapMatrix[row - 1][col] == Cell.TREE || mapMatrix[row - 1][col] == Cell.FARM)) {
+        if ((row != 0) && (mapMatrix[row - 1][col] == Cell.LAND || mapMatrix[row - 1][col] == Cell.TREE || mapMatrix[row - 1][col] == Cell.FARM || mapMatrix[row - 1][col] == Cell.MOUNTAIN || mapMatrix[row - 1][col] == Cell.GOLD_MINE || mapMatrix[row - 1][col] == Cell.IRON_MINE)) {
             counter += 1;
         }
-        if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.LAND || mapMatrix[row + 1][col] == Cell.TREE || mapMatrix[row + 1][col] == Cell.FARM)) {
+        if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.LAND || mapMatrix[row + 1][col] == Cell.TREE || mapMatrix[row + 1][col] == Cell.FARM || mapMatrix[row + 1][col] == Cell.MOUNTAIN || mapMatrix[row + 1][col] == Cell.GOLD_MINE || mapMatrix[row + 1][col] == Cell.IRON_MINE)) {
             counter += 4;
         }
-        if ((col != 0) && (mapMatrix[row][col - 1] == Cell.LAND || mapMatrix[row][col - 1] == Cell.TREE || mapMatrix[row][col - 1] == Cell.FARM)) {
+        if ((col != 0) && (mapMatrix[row][col - 1] == Cell.LAND || mapMatrix[row][col - 1] == Cell.TREE || mapMatrix[row][col - 1] == Cell.FARM || mapMatrix[row][col - 1] == Cell.MOUNTAIN || mapMatrix[row][col - 1] == Cell.GOLD_MINE || mapMatrix[row][col - 1] == Cell.IRON_MINE)) {
             counter += 8;
         }
-        if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.LAND || mapMatrix[row][col + 1] == Cell.TREE || mapMatrix[row][col + 1] == Cell.LAND)) {
+        if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.LAND || mapMatrix[row][col + 1] == Cell.TREE || mapMatrix[row][col + 1] == Cell.LAND || mapMatrix[row][col + 1] == Cell.MOUNTAIN || mapMatrix[row][col + 1] == Cell.GOLD_MINE || mapMatrix[row][col + 1] == Cell.IRON_MINE)) {
             counter += 2;
         }
         return landImages[counter];
@@ -557,8 +620,13 @@ public class Main extends Frame {
             landImages[14] = ImageIO.read(new File(Path.tileImagePath + "su.png"));
             landImages[15] = ImageIO.read(new File(Path.tileImagePath + "cntr.png"));
 
-            treeImage = ImageIO.read(new File("resource/image/item/spring.png"));
 
+            treeImage = ImageIO.read(new File("resource/image/item/spring.png"));
+            mountImage = ImageIO.read(new File("resource/image/tile/mountain.png"));
+            fishImage = ImageIO.read(new File("resource/image/tile/fish.png"));
+            goldMineImage = ImageIO.read(new File("resource/image/tile/goldmine.png"));
+            ironMineImage = ImageIO.read(new File("resource/image/tile/ironmine.png"));
+            farmImage = ImageIO.read(new File("resource/image/tile/farm.png"));
 
             //Scaling images
             waterImage = waterImage.getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
@@ -566,6 +634,11 @@ public class Main extends Frame {
                 landImages[i] = landImages[i].getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
             }
             treeImage = treeImage.getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
+            mountImage = mountImage.getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
+            fishImage = fishImage.getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
+            goldMineImage = goldMineImage.getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
+            ironMineImage = ironMineImage.getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
+            farmImage = farmImage.getScaledInstance(CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, Image.SCALE_DEFAULT);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -683,6 +756,51 @@ public class Main extends Frame {
             }
             mapMatrix[row][col] = content;
             return;
+        } else if (content == Cell.MOUNTAIN){
+            if (mapMatrix[row][col] == Cell.LAND){
+                image = mountImage;
+                graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                repaint();
+            }
+            mapMatrix[row][col] = content;
+            return;
+        } else if (content == Cell.FARM){
+            if (mapMatrix[row][col] == Cell.LAND){
+                image = farmImage;
+                graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                repaint();
+            }
+            mapMatrix[row][col] = content;
+            return;
+        } else if (content == Cell.IRON_MINE){
+            if (mapMatrix[row][col] == Cell.MOUNTAIN){
+                image = ironMineImage;
+                graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                repaint();
+            }
+            mapMatrix[row][col] = content;
+            return;
+        } else if (content == Cell.GOLD_MINE){
+            if (mapMatrix[row][col] == Cell.MOUNTAIN){
+                image = goldMineImage;
+                graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                repaint();
+            }
+            mapMatrix[row][col] = content;
+            return;
+        } else if (content == Cell.FISH) {
+            if (mapMatrix[row][col] == Cell.WATER) {
+                image = fishImage;
+                graphics.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                graphics1.drawImage(image, col * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+                repaint();
+            }
+            mapMatrix[row][col] = content;
+            return;
         }
 
 
@@ -703,6 +821,45 @@ public class Main extends Frame {
             graphics1.drawImage(treeImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
+        if ((col != 0) && (mapMatrix[row][col - 1] == Cell.MOUNTAIN)) {
+            graphics.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((col != 0) && (mapMatrix[row][col - 1] == Cell.GOLD_MINE)) {
+            graphics.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(goldMineImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(goldMineImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((col != 0) && (mapMatrix[row][col - 1] == Cell.IRON_MINE)) {
+            graphics.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col - 1), (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(ironMineImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(ironMineImage, (col - 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+
 
         if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.LAND)) {
             graphics.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
@@ -718,6 +875,44 @@ public class Main extends Frame {
             graphics.drawImage(treeImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
             graphics1.drawImage(treeImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.MOUNTAIN)) {
+            graphics.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.GOLD_MINE)) {
+            graphics.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(goldMineImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(goldMineImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((col != cols - 1) && (mapMatrix[row][col + 1] == Cell.IRON_MINE)) {
+            graphics.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row, col + 1), (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(ironMineImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(ironMineImage, (col + 1) * CELL_DEFAULT_WIDTH, row * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
 
@@ -737,6 +932,45 @@ public class Main extends Frame {
             graphics1.drawImage(treeImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
+        if ((row != 0) && (mapMatrix[row - 1][col] == Cell.MOUNTAIN)) {
+            graphics.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((row != 0) && (mapMatrix[row - 1][col] == Cell.GOLD_MINE)) {
+            graphics.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(goldMineImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(goldMineImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((row != 0) && (mapMatrix[row - 1][col] == Cell.IRON_MINE)) {
+            graphics.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row - 1, col), col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(ironMineImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(ironMineImage, col * CELL_DEFAULT_WIDTH, (row - 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+
 
         if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.LAND)) {
             graphics.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
@@ -752,6 +986,44 @@ public class Main extends Frame {
             graphics.drawImage(treeImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
             graphics1.drawImage(treeImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.MOUNTAIN)) {
+            graphics.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.GOLD_MINE)) {
+            graphics.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(goldMineImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(goldMineImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+        }
+        if ((row != rows - 1) && (mapMatrix[row + 1][col] == Cell.IRON_MINE)) {
+            graphics.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(getLandImage(row + 1, col), col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(mountImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics.drawImage(ironMineImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
+                    CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
+            graphics1.drawImage(ironMineImage, col * CELL_DEFAULT_WIDTH, (row + 1) * CELL_DEFAULT_HEIGHT,
                     CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
         }
 
@@ -775,6 +1047,25 @@ public class Main extends Frame {
                     case LAND:
                         changeItem(j, i, Cell.LAND);
                         break;
+                    case FARM:
+                        changeItem(j,i,Cell.FARM);
+                        break;
+                    case MOUNTAIN:
+                        changeItem(j,i,Cell.MOUNTAIN);
+                        break;
+                    case TREE:
+                        changeItem(j,i,Cell.TREE);
+                        break;
+                    case FISH:
+                        changeItem(j,i,Cell.FISH);
+                        break;
+                    case GOLD_MINE:
+                        changeItem(j,i,Cell.GOLD_MINE);
+                        break;
+                    case IRON_MINE:
+                        changeItem(j,i,Cell.IRON_MINE);
+                        break;
+
                 }
 
                 graphics.drawImage(image, j * CELL_DEFAULT_HEIGHT, i * CELL_DEFAULT_WIDTH, CELL_DEFAULT_WIDTH, CELL_DEFAULT_HEIGHT, null);
@@ -795,9 +1086,7 @@ public class Main extends Frame {
         int height = ((int) (mapHeight * zoomScale));
         int x = -1 * mapViewportX;
         int y = -1 * mapViewportY;
-//        graphics.drawImage(map, x, y, width, height, null);
-        System.out.println("mapViewportX = " + mapViewportX);
-        System.out.println("mapViewportY = " + mapViewportY);
+        graphics.drawImage(map, x, y, width, height, null);
         graphics.drawImage(map.getSubimage(mapViewportX,mapViewportY,mapViewPortWidth,mapViewPortHeight), 0, 0, mapViewPortWidth,mapViewPortHeight, null);
         graphics.drawImage(miniMap,
                 mapViewPortWidth,

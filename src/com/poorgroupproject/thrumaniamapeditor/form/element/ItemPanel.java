@@ -155,7 +155,7 @@ public class ItemPanel extends Canvas {
 
             @Override
             public void mouseEntered(MouseEvent mouseEvent) {
-
+                main.setIsViewPortMoving(false);
             }
 
             @Override
@@ -174,8 +174,10 @@ public class ItemPanel extends Canvas {
             @Override
             public void mouseMoved(MouseEvent mouseEvent) {
                 makeItemDefault();
-                if (itemStatus[(int)(mouseEvent.getY() / itemDimension.getHeight())] != 2)
-                    itemStatus[(int)(mouseEvent.getY() / itemDimension.getHeight())] = 1;
+                try {
+                    if (itemStatus[(int)(mouseEvent.getY() / itemDimension.getHeight())] != 2)
+                        itemStatus[(int)(mouseEvent.getY() / itemDimension.getHeight())] = 1;
+                }catch (ArrayIndexOutOfBoundsException e){}
                 setItemImages();
             }
         });
@@ -185,11 +187,38 @@ public class ItemPanel extends Canvas {
         if (selectedId == index){       //      User wants to deselect the selected item
             selectedId = -1;
             itemStatus[index] = 0;
+            main.pointerMode = null;
         }else {
             if (selectedId != -1)
                 itemStatus[selectedId] = 0;
             selectedId = index;
             itemStatus[index] = 2;
+            switch (index){
+                case 0:
+                    main.pointerMode = Main.PointerMode.FARM;
+                    break;
+                case 1:
+                    main.pointerMode = Main.PointerMode.FISH;
+                    break;
+                case 2:
+                    main.pointerMode = Main.PointerMode.GOLD_MINE;
+                    break;
+                case 3:
+                    main.pointerMode = Main.PointerMode.IRON_MINE;
+                    break;
+                case 4:
+                    main.pointerMode = Main.PointerMode.LAND;
+                    break;
+                case 5:
+                    main.pointerMode = Main.PointerMode.MOUNTAIN;
+                    break;
+                case 6:
+                    main.pointerMode = Main.PointerMode.WATER;
+                    break;
+                case 7:
+                    main.pointerMode = Main.PointerMode.TREE;
+                    break;
+            }
         }
         setItemImages();
     }
